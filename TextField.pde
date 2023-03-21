@@ -18,7 +18,6 @@ class TextField {
     textSize(x/5);
     //println(x/5);
     text(text, width/2, height/2-h/4);
-    textSize(76);
   }
 
   void keyPressed() {

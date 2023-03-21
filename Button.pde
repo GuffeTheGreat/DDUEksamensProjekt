@@ -18,7 +18,8 @@ class Button {
     rect(x, y, w, h);
     fill(0);
     textAlign(CENTER, CENTER);
-    text(label, x + w/2, y+ h/2);
+    textSize(h/3);
+    text(label, x + w/2,  y+h/2-h/12);
   }
 
   boolean isClicked() {

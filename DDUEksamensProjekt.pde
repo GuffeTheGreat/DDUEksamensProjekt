@@ -1,4 +1,4 @@
-int page = 1;
+int page = 2;
 int loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
@@ -11,6 +11,12 @@ Button SpilNu;
 Button Konto;
 Button Flere1;
 Button Flere2;
+Button Tilbage;
+
+Game Game1;
+Game Game2;
+Game Game3;
+Game Game4;
 
 int kl = (22*width-height)/52;
 int kh = height/7;
@@ -27,8 +33,15 @@ void setup() {
   Leaderboard = new Button("Leaderboard", width/24, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24));
   SpilNu = new Button("Spil Nu", width/3, height/7+(2*(height/5)), width/3, 2*(height/5));
   Konto = new Button("Konto", 2*width/3+width/48, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24));
-  Flere1= new Button("Flere", width/6, height-height/24-height/48, width/6, height/24);
-  Flere2= new Button("Flere", 4*width/6, height-3*height/48, width/6, height/24);
+  Flere1 = new Button("Flere", width/6, height-height/24-height/48, width/6, height/24);
+  Flere2 = new Button("Flere", 4*width/6, height-3*height/48, width/6, height/24);
+
+  Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16);
+
+  Game1 = new Game("SPIN PARTY", 1);
+  Game2 = new Game("SPIN PARTY", 2);
+  Game3 = new Game("SPIN PARTY", 3);
+  Game4 = new Game("SPIN PARTY", 4);
 }
 
 void draw() {
@@ -50,7 +63,11 @@ void draw() {
   switch (page) {
   case 1:
     fill(0);
-    rect(width/3, height/2-10, loadingcounter, 20);
+    textAlign(CENTER);
+    textSize(height/5);
+    text("CASINO NAVN", width/2, height/2-20);
+    rect(width/3, height/2+5, loadingcounter, 20);
+    line(width/8, height/2, 7*width/8, height/2);
     loadingcounter++;
     if (loadingcounter >= width/3) {
       //noLoop();
@@ -65,7 +82,19 @@ void draw() {
   case 3:
     Flere1.draw();
     Flere2.draw();
-    line(width/2, height/3, width/2, height-height/24);
+    Tilbage.draw();
+    Game1.BigButton(width/30,height/3);
+    Game2.BigButton(2*width/30+width/5,height/3);
+    Game3.BigButton(4*width/30+2*width/5,height/3);
+    Game4.BigButton(5*width/30+3*width/5,height/3);
+    fill(0);
+    textAlign(CENTER);
+    textSize(height/3-20);
+    text("SPIL", width/2, height/3-height/4);
+    line(width/2, height/3-height/4, width/2, height-height/24);
+    textSize(height/12);
+    text("Mest Populære", width/4, height/3+10);
+    text("De helt nye", 3*width/4, height/3+10);
     break;
   }
 }
@@ -75,6 +104,11 @@ void mousePressed() {
   case 2:
     if (SpilNu.isClicked()) {
       page = 3;
+    }
+    break;
+  case 3:
+    if (Tilbage.isClicked()) {
+      page = 2;
     }
     break;
   }
