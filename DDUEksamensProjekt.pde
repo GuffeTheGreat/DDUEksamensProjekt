@@ -38,7 +38,7 @@ void setup() {
 
   Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16);
 
-  Game1 = new Game("SPIN PARTY", 1);
+  Game1 = new Game("goldrush", 1);
   Game2 = new Game("SPIN PARTY", 2);
   Game3 = new Game("SPIN PARTY", 3);
   Game4 = new Game("SPIN PARTY", 4);
@@ -83,15 +83,15 @@ void draw() {
     Flere1.draw();
     Flere2.draw();
     Tilbage.draw();
-    Game1.BigButton(width/30,height/3);
-    Game2.BigButton(2*width/30+width/5,height/3);
-    Game3.BigButton(4*width/30+2*width/5,height/3);
-    Game4.BigButton(5*width/30+3*width/5,height/3);
+    Game1.BigButton(width/30,height/3+40);
+    //Game2.BigButton(2*width/30+width/5,height/3+40);
+    //Game3.BigButton(4*width/30+2*width/5,height/3+40);
+    //Game4.BigButton(5*width/30+3*width/5,height/3+40);
     fill(0);
     textAlign(CENTER);
     textSize(height/3-20);
-    text("SPIL", width/2, height/3-height/4);
-    line(width/2, height/3-height/4, width/2, height-height/24);
+    text("SPIL", width/2, height/2-height/4);
+    line(width/2, height/3-50, width/2, height-height/24);
     textSize(height/12);
     text("Mest Populære", width/4, height/3+10);
     text("De helt nye", 3*width/4, height/3+10);
