@@ -39,7 +39,7 @@ void setup() {
   Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16);
 
   Game1 = new Game("goldrush", 1);
-  Game2 = new Game("SPIN PARTY", 2);
+  Game2 = new Game("catjam", 2);
   Game3 = new Game("SPIN PARTY", 3);
   Game4 = new Game("SPIN PARTY", 4);
 }
@@ -84,7 +84,7 @@ void draw() {
     Flere2.draw();
     Tilbage.draw();
     Game1.BigButton(width/30,height/3+40);
-    //Game2.BigButton(2*width/30+width/5,height/3+40);
+    Game2.BigButton(2*width/30+width/5,height/3+40);
     //Game3.BigButton(4*width/30+2*width/5,height/3+40);
     //Game4.BigButton(5*width/30+3*width/5,height/3+40);
     fill(0);

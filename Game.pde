@@ -3,6 +3,7 @@ class Game {
   int x, y, w, h, id;
   boolean clicked;
   PImage preview;
+  float textWidth;
 
   Game(String name, int id) {
     this.name = name;
@@ -15,6 +16,15 @@ class Game {
     fill(255);
     rect(x, y, width/5, 3*height/5-60);
     image(preview,x+(width/5)/10,y+(3*height/5-60)/10,width/5-(width/5)/5,(3*height/5-60-(3*height/5-60)/5)/2);
+    fill(0);
+    textSize(2*((3*height/5-60)/10));
+    //textAlign(CENTER);
+    //  
+    //
+    float textWidth = textWidth(name);
+    println(textWidth);
+    rect(x,y,textWidth/2,30);
+    text(name,x+(width/5-(width/5)/5),y);
   }
 
   boolean isClicked() {
