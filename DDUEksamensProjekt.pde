@@ -38,10 +38,10 @@ void setup() {
 
   Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16);
 
-  Game1 = new Game("goldrush", 1);
-  Game2 = new Game("catjam", 2);
-  Game3 = new Game("SPIN PARTY", 3);
-  Game4 = new Game("SPIN PARTY", 4);
+  Game1 = new Game("Totem Lightning", 1);
+  Game2 = new Game("Fruit Spins", 2);
+  Game3 = new Game("777 Win", 3);
+  Game4 = new Game("Slots", 4);
 }
 
 void draw() {
@@ -83,10 +83,10 @@ void draw() {
     Flere1.draw();
     Flere2.draw();
     Tilbage.draw();
-    Game1.BigButton(width/30,height/3+40);
-    Game2.BigButton(2*width/30+width/5,height/3+40);
-    //Game3.BigButton(4*width/30+2*width/5,height/3+40);
-    //Game4.BigButton(5*width/30+3*width/5,height/3+40);
+    Game1.BigButton(width/30, height/3+40);
+    Game2.BigButton(2*width/30+width/5, height/3+40);
+    Game3.BigButton(4*width/30+2*width/5, height/3+40);
+    Game4.BigButton(5*width/30+3*width/5, height/3+40);
     fill(0);
     textAlign(CENTER);
     textSize(height/3-20);
@@ -109,6 +109,14 @@ void mousePressed() {
   case 3:
     if (Tilbage.isClicked()) {
       page = 2;
+    } else if (Game1.BigIsClicked()) {
+            page = 4;
+    } else if (Game2.BigIsClicked()) {
+            page = 5;
+    } else if (Game3.BigIsClicked()) {
+            page = 6;
+    } else if (Game4.BigIsClicked()) {
+            page = 7;
     }
     break;
   }
