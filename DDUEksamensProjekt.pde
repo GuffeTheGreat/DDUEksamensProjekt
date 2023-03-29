@@ -4,8 +4,6 @@ int a = 0;
 int totalPageCount = 60;
 boolean changed;
 
-PImage cursorImg;
-
 Button Leaderboard;
 Button SpilNu;
 Button Konto;
@@ -18,8 +16,6 @@ Game Game2;
 Game Game3;
 Game Game4;
 
-int kl = (22*width-height)/52;
-int kh = height/7;
 
 void setup() {
 
@@ -35,7 +31,6 @@ void setup() {
   Konto = new Button("Konto", 2*width/3+width/48, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24));
   Flere1 = new Button("Flere", width/6, height-height/24-height/48, width/6, height/24);
   Flere2 = new Button("Flere", 4*width/6, height-3*height/48, width/6, height/24);
-
   Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16);
 
   Game1 = new Game("Totem Lightning", 1);
@@ -70,7 +65,6 @@ void draw() {
     line(width/8, height/2, 7*width/8, height/2);
     loadingcounter++;
     if (loadingcounter >= width/3) {
-      //noLoop();
       page = 2;
     }
     break;
@@ -96,6 +90,22 @@ void draw() {
     text("Mest Populære", width/4, height/3+10);
     text("De helt nye", 3*width/4, height/3+10);
     break;
+  case 4:
+    Game1.draw();
+    Tilbage.draw();
+    break;
+  case 5:
+    Game2.draw();
+    Tilbage.draw();
+    break;
+  case 6:
+    Game3.draw();
+    Tilbage.draw();
+    break;
+  case 7:
+    Game4.draw();
+    Tilbage.draw();
+    break;
   }
 }
 
@@ -110,14 +120,42 @@ void mousePressed() {
     if (Tilbage.isClicked()) {
       page = 2;
     } else if (Game1.BigIsClicked()) {
-            page = 4;
+      page = 4;
     } else if (Game2.BigIsClicked()) {
-            page = 5;
+      page = 5;
     } else if (Game3.BigIsClicked()) {
-            page = 6;
+      page = 6;
     } else if (Game4.BigIsClicked()) {
-            page = 7;
+      page = 7;
     }
+    break;
+  case 4:
+    Game1.spin();
+    if (Tilbage.isClicked()) {
+      page = 3;
+    }
+    println("bruh");
+    break;
+  case 5:
+    Game2.spin();
+    if (Tilbage.isClicked()) {
+      page = 3;
+    }
+    println("bruh");
+    break;
+  case 6:
+    Game3.spin();
+    if (Tilbage.isClicked()) {
+      page = 3;
+    }
+    println("bruh");
+    break;
+  case 7:
+    Game4.spin();
+    if (Tilbage.isClicked()) {
+      page = 3;
+    }
+    println("bruh");
     break;
   }
 }
