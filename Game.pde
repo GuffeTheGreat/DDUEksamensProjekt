@@ -39,12 +39,12 @@ class Game {
       
       if (slot.stopped == false && slot.start_time + slot.delay_time < millis() && slot.symbols.get(0).location.y % 250 == 0){
         slot.stopped = true;
-        
         for (int n = 0; n < slot.symbols.size();n++){
           float y_pos = slot.symbols.get(n).location.y/250;
           int new_y_pos = round(y_pos);
           slot.symbols.get(n).location.y = 250.0 * new_y_pos;
         }
+        slot.stop();
         
       }
       

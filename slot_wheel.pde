@@ -34,7 +34,6 @@ class slot_wheel {
     stop();
     toStop = false;
     stopped = true;
-    println("a");
     
     }
   }
