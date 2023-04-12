@@ -9,9 +9,10 @@ class Game {
   int w2;
   int h2;
 
-  int frame = 0;
-  int slot_to_stop = 0;
 
+
+  boolean canSpin = true;
+  boolean isSpinning = false;
   boolean flashing = false;
 
   ArrayList<slot_wheel> Slots = new ArrayList<slot_wheel>();
@@ -23,68 +24,61 @@ class Game {
     this.id = id;
     preview = loadImage(id+".png");
     for (int i = 0; i < 5; i++) {
-      Slots.add(new slot_wheel(new PVector(i*300 + (width/2) - (300*2.5), 450)));
+      Slots.add(new slot_wheel(new PVector(i*300 + (width/2) - (300*2.5), 500), this));
+      Slots.get(i).delay_time = (200 * i) + 1000;
     }
   }
 
   void draw() {
-    frame += 1;
     background(0);
-
-
 
     for (int i = 0; i < Slots.size(); i++) {
       slot_wheel slot = Slots.get(i);
+      slot.display();
 
-      if (flashing == true) {
-        slot.display(abs(-frame/3 + i) % 3);
-      } else {
-        slot.display(0);
+      
+      if (slot.stopped == false && slot.start_time + slot.delay_time < millis() && slot.symbols.get(0).location.y % 250 == 0){
+        slot.stopped = true;
+        
+        for (int n = 0; n < slot.symbols.size();n++){
+          float y_pos = slot.symbols.get(n).location.y/250;
+          int new_y_pos = round(y_pos);
+          slot.symbols.get(n).location.y = 250.0 * new_y_pos;
+        }
+        
       }
-      if (frame % 2 == 0 && slot.stopped == false) {
+      
+      if (slot.stopped == false) {
         slot.speen();
       }
-    }
+    
   }
+
+
+}
 
   void spin() {
-    //if (key == 'x') {
-      if (slot_to_stop < Slots.size()) {
-        slot_wheel slot = Slots.get(slot_to_stop);
-        slot.stop();
-        slot_to_stop += 1;
-
-        if (slot_to_stop == Slots.size()) {
-          check_for_alignments();
-        }
-      } else {
-
-        for (int i = 0; i < Slots.size(); i++) {
-          slot_wheel slot = Slots.get(i);
-          slot.stopped = false;
-          slot_to_stop = 0;
-          flashing = false;
-        }
-      //}
+    if (canSpin){
+      canSpin = false;
+      for(int i = 0; i < Slots.size(); i++){
+        Slots.get(i).stopped = false;
+        Slots.get(i).start_time = millis();
     }
+    
+  }
   }
 
-  void check_for_alignments() {
-    //Check middle
-    boolean mid = true;
-    int mid_number = Slots.get(0).number;
-    println(mid_number);
-    for (int i = 0; i < Slots.size()+1; i++) {
-      slot_wheel slot = Slots.get(i);
-      if (slot.number != mid_number) {
-        mid = false;
-        break;
-      }
-      if (mid == true) {
-        flashing = true;
-      }
+
+void check_alignments(){
+  if (Slots.get(4).stopped == true){
+    for(int i = 0; i < Slots.size(); i++){
+        Slots.get(i).printValues();
     }
   }
+}
+
+
+
 
   void BigButton(int x, int y) {
     stroke(0);

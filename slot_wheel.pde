@@ -1,14 +1,20 @@
 class slot_wheel {
   PVector location;
   int number = 1;
-  boolean stopped = false;
+  boolean stopped = true;
+  boolean toStop = false;
   ArrayList<Symbol> symbols = new ArrayList<Symbol>();
 
+  int start_time;
+  int delay_time;
+  
+  Game parent;
 
-  slot_wheel(PVector loc) {
+  slot_wheel(PVector loc, Game p) {
     location = loc;
+    parent = p;
     for (int i = 0; i < 8; i++){
-    symbols.add(new Symbol(i, new PVector(location.x,location.y - (250 * i))));
+    symbols.add(new Symbol(i, new PVector(location.x,location.y - (250 * i) + 500),location.y - (250 * 6)));
     }
   }
 
@@ -24,70 +30,60 @@ class slot_wheel {
     for (int i = 0; i < 8; i++){
     symbols.get(i).location.y += 50;
     }
+    if (symbols.get(1).location.y % 75 == 0 && toStop == true){
+    stop();
+    toStop = false;
+    stopped = true;
+    println("a");
+    
+    }
   }
 
-  void display(int flash_color) {
-    color Col = 0;
+  void stop(){
+  
+    println("a");
+    parent.check_alignments();
+    
+  }
 
-    switch(flash_color) {
-    case 0:
-      Col = color(255);
-      break;
-    case 1:
-      Col = color(255, 0, 0);
-      break;
-    case 2:
-      Col = color(255, 255, 0);
-      break;
-    }
+  void display() {
 
-    fill(Col);
-    text(number, location.x, location.y);
-
-    fill(Col, 100);
-
-
-    text(get_non_center_number(-1), location.x, location.y - 200);
-    text(get_non_center_number(1), location.x, location.y + 200);
         for (int i = 0; i < 8; i++){
     symbols.get(i).display();
     }
   }
-
-  int get_non_center_number(int dir) {
-    if (dir == 0) {
-      return 0;
+  void printValues(){
+    
+    for (int i = 0; i < symbols.size();i++){
+    println(symbols.get(i).location.y);
     }
-
-    if (dir > 0 && number == 9) {
-      return 0;
-    }
-
-    if (dir < 0 && number == 0) {
-      return 9;
-    }
-
-    return number + dir;
   }
 
-  void stop() {
-    stopped = true;
-  }
+
+
 }
+
+
 class Symbol{
 
   PImage symbol_images = loadImage("Symboler.png");
   PVector location;
+  float spawn_y_pos;
   int symbol_idx;
   
-  Symbol(int idx, PVector loc){
+  Symbol(int idx, PVector loc,float spawn_y){
   symbol_idx = idx;
   location = loc;
+  spawn_y_pos = spawn_y;
   }
   
   void display(){
-  PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
-  image(new_img,location.x,location.y);
-  }
+      PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
+      image(new_img,location.x,location.y);
+          if (location.y > 1000){
+            location.y = spawn_y_pos;
+          }
+      }
+  
   
 }
