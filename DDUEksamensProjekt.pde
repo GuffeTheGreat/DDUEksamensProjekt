@@ -21,6 +21,9 @@ void setup() {
 
   // Fullscreen
   fullScreen();
+  
+  // FrameRate
+  frameRate(60);
 
   // Title
   surface.setTitle("Online Casino");

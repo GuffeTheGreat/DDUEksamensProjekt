@@ -22,8 +22,8 @@ class Game {
     this.name = name;
     this.id = id;
     preview = loadImage(id+".png");
-    for (int i = 0; i < 3; i++) {
-      Slots.add(new slot_wheel(new PVector(i*200, 450)));
+    for (int i = 0; i < 5; i++) {
+      Slots.add(new slot_wheel(new PVector(i*300 + (width/2) - (300*2.5), 450)));
     }
   }
 
@@ -76,7 +76,6 @@ class Game {
     println(mid_number);
     for (int i = 0; i < Slots.size()+1; i++) {
       slot_wheel slot = Slots.get(i);
-      println("deez nuts");
       if (slot.number != mid_number) {
         mid = false;
         break;
