@@ -13,8 +13,25 @@ class slot_wheel {
   slot_wheel(PVector loc, Game p) {
     location = loc;
     parent = p;
+    
+    int[] random_numbers = new int[8];
+    
     for (int i = 0; i < 8; i++){
-    symbols.add(new Symbol(i, new PVector(location.x,location.y - (250 * i) + 500),location.y - (250 * 6)));
+      random_numbers[i] = i;
+    }
+    for (int i = 0; i < 8; i++){
+    
+      int rng = int(random(0,random_numbers.length));
+      symbols.add(new Symbol(random_numbers[rng], new PVector(location.x,location.y - (250 * i) + 500),location.y - (250 * 6)));
+      
+      
+      int sub1 = random_numbers[random_numbers.length-1];
+      int sub2 = random_numbers[rng];
+      
+      random_numbers[random_numbers.length-1] = sub2;
+      random_numbers[rng] = sub1;
+      
+      random_numbers = shorten(random_numbers);
     }
   }
 
@@ -40,7 +57,6 @@ class slot_wheel {
 
   void stop(){
   
-    println("a");
     parent.check_alignments();
     
   }
@@ -58,6 +74,17 @@ class slot_wheel {
     }
   }
 
+  int[] get_symbol_positions(){
+    int [] return_symbols = new int[3];
+    int array_index = 0;
+    for(int i = 0; i < symbols.size();i++){
+      if (symbols.get(i).location.y == 250.0 || symbols.get(i).location.y == 500.0 || symbols.get(i).location.y == 750.0 ){
+      return_symbols[array_index] = (symbols.get(i).symbol_idx);
+      array_index++;
+      }
+    }
+    return return_symbols;
+  }
 
 
 }
@@ -77,11 +104,17 @@ class Symbol{
   }
   
   void display(){
-      PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
-      image(new_img,location.x,location.y);
+      
           if (location.y > 1000){
             location.y = spawn_y_pos;
           }
+    if (location.y < 150 || location.y > 850){
+      return;
+    }
+    
+    PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
+      image(new_img,location.x,location.y);
+
       }
   
   

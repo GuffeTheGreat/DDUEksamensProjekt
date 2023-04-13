@@ -71,9 +71,24 @@ class Game {
 
 void check_alignments(){
   if (Slots.get(4).stopped == true){
+    
+    
+    // Gets the slot positions in a 2D Array
+    int[][] slots_array = new int[5][];
     for(int i = 0; i < Slots.size(); i++){
-        Slots.get(i).printValues();
+      slot_wheel slot = Slots.get(i);  
+      slots_array[i] = slot.get_symbol_positions();
     }
+    
+    
+    // Checks
+    
+    
+    
+    if (slots_array[0][1] == slots_array[1][1]){
+    println("you ween");
+    }
+    canSpin = true;
   }
 }
 
