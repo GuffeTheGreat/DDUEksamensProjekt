@@ -8,6 +8,7 @@ class slot_wheel {
   int start_time;
   int delay_time;
   
+  
   Game parent;
 
   slot_wheel(PVector loc, Game p) {
@@ -36,17 +37,13 @@ class slot_wheel {
   }
 
 
-
-
-
-
-
   //Speen
   void speen() {
-    number = (number + 1) % 10;
+    
     for (int i = 0; i < 8; i++){
-    symbols.get(i).location.y += 50;
+    symbols.get(i).location.y += int(50);
     }
+    
     if (symbols.get(1).location.y % 75 == 0 && toStop == true){
     stop();
     toStop = false;
@@ -74,15 +71,32 @@ class slot_wheel {
     }
   }
 
+  void snap_to_place(){
+  
+  for (int n = 0; n < symbols.size();n++){
+          float y_pos = symbols.get(n).location.y/250;
+          int new_y_pos = round(y_pos);
+          symbols.get(n).location.y = 250.0 * new_y_pos;
+        }
+  }
+
+
   int[] get_symbol_positions(){
+    
+    snap_to_place();
+    
     int [] return_symbols = new int[3];
-    int array_index = 0;
+    
     for(int i = 0; i < symbols.size();i++){
-      if (symbols.get(i).location.y == 250.0 || symbols.get(i).location.y == 500.0 || symbols.get(i).location.y == 750.0 ){
-      return_symbols[array_index] = (symbols.get(i).symbol_idx);
-      array_index++;
+      if ((symbols.get(i).location.y > 200.0 && symbols.get(i).location.y < 300)){
+      return_symbols[0] = (symbols.get(i).symbol_idx) + 1;
+      return_symbols[1] = (symbols.get((i-1+8)%8).symbol_idx) + 1;
+      return_symbols[2] = (symbols.get((i-2+8)%8).symbol_idx) + 1;
+      break;
       }
-    }
+      }
+    
+    
     return return_symbols;
   }
 
@@ -106,9 +120,10 @@ class Symbol{
   void display(){
       
           if (location.y > 1000){
+            symbol_idx = int(random(0,8));
             location.y = spawn_y_pos;
           }
-    if (location.y < 150 || location.y > 850){
+    if (location.y < 225 || location.y > 775){
       return;
     }
     

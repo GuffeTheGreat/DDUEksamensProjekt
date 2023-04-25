@@ -2,6 +2,7 @@ int page = 2;
 int loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
+int credits = 200;
 boolean changed;
 
 Button Leaderboard;
@@ -110,6 +111,13 @@ void draw() {
     Tilbage.draw();
     break;
   }
+  stroke(2);
+  fill(255);
+  rect(width -300, height/96, 300 - height/96,height/16);
+  textAlign(CENTER,CENTER);
+  fill(0);
+  textSize(height/96*3);
+  text("Spundulix: " + credits,width - 150,height/96 + height/34);
 }
 
 void mousePressed() {

@@ -14,6 +14,7 @@ class Button {
 
   void draw() {
     stroke(0);
+    strokeWeight(2);
     fill(255);
     rect(x, y, w, h);
     fill(0);
