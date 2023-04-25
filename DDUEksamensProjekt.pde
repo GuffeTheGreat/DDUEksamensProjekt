@@ -1,8 +1,26 @@
+import processing.sound.*;
+
+// Sounds
+SoundFile win_sound;
+SoundFile slot_machine_start;
+SoundFile slot_machine_wheelstop;
+
 int page = 2;
 int loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
-int credits = 200;
+int credits = 500;
+
+
+float displaycredits = credits;
+
+//Credit Notification
+String credit_notif_number = "0";
+color credit_notif_col = color(0);
+float credit_notif_alpha = 1.0;
+float credit_notif_y_pos = height/34;
+
+
 boolean changed;
 
 Button Leaderboard;
@@ -25,6 +43,11 @@ void setup() {
   
   // FrameRate
   frameRate(60);
+
+  // Load Sounds
+  win_sound = new SoundFile(this, "winsound.wav");
+  slot_machine_start = new SoundFile(this, "click.wav");
+  slot_machine_wheelstop = new SoundFile(this, "slotwheelstop.wav");
 
   // Title
   surface.setTitle("Online Casino");
@@ -71,13 +94,16 @@ void draw() {
     if (loadingcounter >= width/3) {
       page = 2;
     }
+    
     break;
   case 2:
+    background(255);
     SpilNu.draw();
     Konto.draw();
     Leaderboard.draw();
     break;
   case 3:
+    background(255);
     Flere1.draw();
     Flere2.draw();
     Tilbage.draw();
@@ -95,6 +121,7 @@ void draw() {
     text("De helt nye", 3*width/4, height/3+10);
     break;
   case 4:
+    background(0);
     Game1.draw();
     Tilbage.draw();
     break;
@@ -111,13 +138,30 @@ void draw() {
     Tilbage.draw();
     break;
   }
+  
+  
+  
   stroke(2);
   fill(255);
   rect(width -300, height/96, 300 - height/96,height/16);
   textAlign(CENTER,CENTER);
   fill(0);
   textSize(height/96*3);
-  text("Spundulix: " + credits,width - 150,height/96 + height/34);
+  text("Moolah: " + int(ceil(displaycredits)),width - 150,height/96 + height/34);
+  
+  
+  textAlign(RIGHT,CENTER);
+  credit_notif_alpha = lerp(credit_notif_alpha,0.0,0.05);
+  credit_notif_y_pos = lerp(credit_notif_y_pos,height/96.0 + height/34.0 + 100.0, 0.05);
+  fill(credit_notif_col,int(credit_notif_alpha));
+  textSize(height/96*3);
+  text(credit_notif_number,width - 75,credit_notif_y_pos);
+  
+}
+
+void increment_credits_counter_smooth(){
+  displaycredits = (lerp(displaycredits,credits,0.015));
+
 }
 
 void mousePressed() {
@@ -169,4 +213,22 @@ void mousePressed() {
     println("bruh");
     break;
   }
+  
+  
+}
+
+void credit_notification(int amount){
+  
+  credit_notif_number = "";
+  if (amount > 0){
+    credit_notif_col = color(0,255,0);
+    credit_notif_number = "+";
+  } else {
+    
+    credit_notif_col = color(255,0,0);
+  }
+  
+    credit_notif_alpha = 255.0;
+    credit_notif_number += amount;
+    credit_notif_y_pos = height/96.0 + height/25.0;
 }

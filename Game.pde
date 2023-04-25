@@ -23,7 +23,6 @@ class Game {
   ArrayList<slot_wheel> Slots = new ArrayList<slot_wheel>();
 
 
-
   Game(String name, int id) {
     this.name = name;
     this.id = id;
@@ -38,7 +37,6 @@ class Game {
   }
 
   void draw() {
-    background(0);
 
     for (int i = 0; i < Slots.size(); i++) {
       slot_wheel slot = Slots.get(i);
@@ -53,12 +51,17 @@ class Game {
           int new_y_pos = round(y_pos);
           slot.symbols.get(n).location.y = 250.0 * new_y_pos;
         }
+        slot_machine_wheelstop.play();
         slot.stop();
         
       }
       
       if (slot.stopped == false) {
         slot.speen();
+      }
+      
+      if (flashing){
+        increment_credits_counter_smooth();
       }
 
   }
@@ -69,10 +72,19 @@ class Game {
     return;
   }
   
+  
   //Le Lines
   for (int a = 0; a < 3; a++){
     if (line_positions[a].y != 0){
+      
+    if (flashing){
+     if (sin(millis()/20) < 0.5){
+          line(340 + (300 * line_positions[a].x),350 + (250 * a),340 + (300 * line_positions[a].x)+ (300 * line_positions[a].y), 350 + (250 * a));
+     }
+    } else{
+      
     line(340 + (300 * line_positions[a].x),350 + (250 * a),340 + (300 * line_positions[a].x)+ (300 * line_positions[a].y), 350 + (250 * a));
+    }
     }
   }
   
@@ -84,15 +96,25 @@ class Game {
   //line(340,350,width/2 - 25,850);
   //line(width/2 -25,850,width - 360,350);
   
+  if (!flashing){
+  return;
+  }
   
+  if (ceil(displaycredits) == credits){
+    win_sound.stop();
+    flashing = false;
+  }
 
 
 }
 
   void spin() {
     if (canSpin && credits >= 20){
+      slot_machine_start.play();
       canSpin = false;
       credits -= 20;
+      credit_notification(-20);
+      displaycredits = credits;
       show_result = false;
       game_result = new int[3][5];
       for(int i = 0; i < Slots.size(); i++){
@@ -196,12 +218,31 @@ void check_alignments(){
       }
     }
     
+    check_for_wins();
     show_result = true;
-    
-
     canSpin = true;
   }
 }
+
+void check_for_wins(){
+  boolean is_there_win = false;
+  int win_amount = 0;
+  for (int i = 0; i < 3; i++){
+    if (get_array_content_size(game_result[i]) > 2){
+      win_amount += 200 * (get_array_content_size(game_result[i]) - 2);
+      is_there_win = true;
+    }
+  }
+  
+  if (is_there_win){
+    flashing = true;
+    credits += win_amount;
+    credit_notification(win_amount);
+    win_sound.loop();
+  }
+}
+
+
 
 int get_array_content_size(int[] array){
     int value = 0;
