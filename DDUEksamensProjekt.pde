@@ -1,3 +1,4 @@
+
 import processing.sound.*;
 
 // Sounds
@@ -21,7 +22,19 @@ float credit_notif_alpha = 1.0;
 float credit_notif_y_pos = height/34;
 
 
+int page = 2; 
+float loadingcounter = 0;
+int a = 0;
+int totalPageCount = 60;
+int treecounter = 11;
+int credits = 20000;
+int load;
+int tredjedel = width/3;
+String name = "Green Jackpot Casino";
 boolean changed;
+int charity = 7483743;
+
+PImage Tree[] = new PImage[treecounter+1];
 
 Button Leaderboard;
 Button SpilNu;
@@ -40,7 +53,7 @@ void setup() {
 
   // Fullscreen
   fullScreen();
-  
+
   // FrameRate
   frameRate(60);
 
@@ -50,7 +63,12 @@ void setup() {
   slot_machine_wheelstop = new SoundFile(this, "slotwheelstop.wav");
 
   // Title
-  surface.setTitle("Online Casino");
+  surface.setTitle(name);
+
+  // Load Images
+  for (int i = 1; i <= treecounter; i++) {
+    Tree[i] = loadImage("data/"+i+"tree.png");
+  }
 
   // Create Buttons
   Leaderboard = new Button("Leaderboard", width/24, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24));
@@ -76,8 +94,8 @@ void draw() {
 
   // Background Opdaterer
   if (changed == true) {
-    println(page);
-    background(255  );
+    //println(page);
+    background(255);
     changed = false;
   }
 
@@ -85,22 +103,78 @@ void draw() {
   switch (page) {
   case 1:
     fill(0);
-    textAlign(CENTER);
-    textSize(height/5);
-    text("CASINO NAVN", width/2, height/2-20);
+    //textAlign(CENTER);
+    //textSize(height/6.5);
+    //text(name, width/2, height/2-20);
     rect(width/3, height/2+5, loadingcounter, 20);
-    line(width/8, height/2, 7*width/8, height/2);
-    loadingcounter++;
+
+
+
+
     if (loadingcounter >= width/3) {
       page = 2;
+    } else if (loadingcounter == 0) {
+      load = 1;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      line(width/8, height/2, 7*width/8, height/2);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
+      image(Tree[load], width/21, height-height/9-height/35, width/42, height/35);
+      image(Tree[load], width/21+width*19/21, height-height/9-height/35, width/42, height/35);
+    } else if (loadingcounter == ceil(width/3*1/6 / 2.0) * 2) {
+      load = 2;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      line(width/8, height/2, 7*width/8, height/2);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
+      image(Tree[load], width/21, height-height/9-height/16, width/42, height/16);
+      image(Tree[load], width/21+width*19/21, height-height/9-height/16, width/42, height/16);
+    } else if (loadingcounter == ceil(width/3*2/6 / 2.0) * 2) {
+      load = 3;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      line(width/8, height/2, 7*width/8, height/2);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
+      image(Tree[load], 3*width/84, height-height/9-height/6, width/21, height/6);
+      image(Tree[load], 3*width/84+width*19/21, height-height/9-height/6, width/21, height/6);
+    } else if (loadingcounter == ceil(width/3*3/6 / 2.0) * 2) {
+      load = 4;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      line(width/8, height/2, 7*width/8, height/2);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
+      image(Tree[load], width/56, height-height/9-height/3, width/12, height/3);
+      image(Tree[load], width/56+width*19/21, height-height/9-height/3, width/12, height/3);
+    } else if (loadingcounter == ceil(width/3*4/6 / 2.0) * 2) {
+      load = 5;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      //line(width/8, height/2, 7*width/8, height/2);
+      rect(width/8, height-3, 7*width/8, height/2+3);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
+      image(Tree[load], -width*11/168, height-height/9-height/2, width/4, height/2);
+      image(Tree[load], -width*11/168+width*19/21, height-height/9-height/2, width/4, height/2);
+    } else if (loadingcounter == ceil(width/3*5/6 / 2.0) * 2) {
+      load = 6;
+      image(Tree[10], 0, 0, width, height);
+      image(Tree[9], 0, height-height/9-8, width, height/9+8);
+      image(Tree[load], -4*width/21, height-height/9-3*height/4, width/2, 3*height/4);
+      image(Tree[load], -4*width/21+width*19/21, height-height/9-3*height/4, width/2, 3*height/4);
+      //line(width/8, height/2, 7*width/8, height/2);
+      rect(width/8, height/2-3, 7*width/8-width/8, height/2+3-height/2-3);
+      image(Tree[11], width/8, height/2+10-height/4, 6*width/8, height/4);
     }
-    
+
+
+    loadingcounter = loadingcounter + 2;
     break;
   case 2:
     background(255);
     SpilNu.draw();
     Konto.draw();
     Leaderboard.draw();
+    textSize(256);
+    text(charity,width/2,height/5);
     break;
   case 3:
     background(255);
@@ -164,6 +238,16 @@ void increment_credits_counter_smooth(){
 
 }
 
+  if (page != 1) {
+    stroke(2);
+    fill(255);
+    rect(width -300, height/96, 300 - height/96, height/16);
+    textAlign(CENTER, CENTER);
+    fill(0);
+    textSize(height/96*3);
+    text("Spundulix: " + credits, width - 150, height/96 + height/34);
+  }
+}
 void mousePressed() {
   switch (page) {
   case 2:
