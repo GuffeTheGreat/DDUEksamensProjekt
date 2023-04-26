@@ -39,11 +39,11 @@ class Game {
   Game(String name, int id) {
     this.name = name;
     this.id = id;
-    SpinButton = new Button("Spin", width/2 - 90, height - 150, 180, 130);
-    PayoutTableButton = new Button("Payout Table thing", width/2 - 90, height - 220, 180, 50);
+    SpinButton = new Button("Spin", width/2 - 90, height - 150, 180, 130,0,0,0,400,255);
+    PayoutTableButton = new Button("Payout Table thing", width/2 - 90, height - 220, 180, 50,0,0,0,400,255);
 
     for (int a = 0; a < 4; a++) {
-      line_buttons.add(new Button((1 + 2*(3-a)) +"\nLines", width/2 - 250 - (a * 150), height - 150, 130, 130));
+      line_buttons.add(new Button((1 + 2*(3-a)) +"\nLines", width/2 - 250 - (a * 150), height - 150, 130, 130,0,0,0,400,255));
     }
 
     preview = loadImage(id+".png");

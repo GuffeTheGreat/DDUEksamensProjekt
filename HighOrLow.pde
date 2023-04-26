@@ -41,7 +41,7 @@ class HighOrLow {
         break;
       }
 
-      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.6), 250, 150));
+      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.6), 250, 150,0,0,0,400,255));
     }
   }
 

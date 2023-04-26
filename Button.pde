@@ -1,27 +1,33 @@
 class Button {
   String label;
-  int x, y, w, h;
+  int x, y, w, h, r, g, b, v,t;
   boolean clicked;
 
-  Button(String label, int x, int y, int w, int h) {
+  Button(String label, int x, int y, int w, int h, int r, int g, int b, int v,int t) {
     this.label = label;
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.v = v;
+    this.t = t;
     this.clicked = false;
   }
 
   void draw() {
-    stroke(0);
+    stroke(223, 180, 83);
     strokeWeight(2);
-    fill(255);
+    fill(r,g,b,v);
     if (isHover() && !mousePressed){
-      fill(155);
+      fill(104);
     }
     rect(x, y, w, h);
-    fill(0);
+    fill(t);
     textAlign(CENTER, CENTER);
+    textFont(font2);
     textSize(h/3);
     text(label, x + w/2, y+h/2-h/12);
   }
