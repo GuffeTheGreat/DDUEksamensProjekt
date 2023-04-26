@@ -11,10 +11,14 @@ class HighOrLow {
 
   int card_number = int(random(2, 14));
   int card_next_number = int(random(2, 14));
-  
+
+
+  int bet_amount = 0;
   int payout = 0;
 
   ArrayList<Button> buttons = new ArrayList<Button>();
+  ArrayList<Button> bet_buttons = new ArrayList<Button>();
+  Button fold_button = new Button("Stop", width/2 -150, int(height*0.8), 300, 150);
 
 
   HighOrLow(String name, int id) {
@@ -41,18 +45,38 @@ class HighOrLow {
         break;
       }
 
-      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.6), 250, 150));
+      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.5), 250, 150));
+      buttons.get(i).disabled = true;
+    }
+
+    for (int n = 0; n < 2; n++) {
+      String button_name = "";
+
+      switch(n) {
+      case 0:
+        button_name = "-";
+        break;
+
+      case 1:
+        button_name = "+";
+        break;
+      }
+      bet_buttons.add(new Button(button_name, width/2 - (300*(1-n)) + 100, int(height*0.675), 100, 100));
     }
   }
 
   void guess(int guessMode) {
-    
+
+
+    credits -= bet_amount;
+    credit_notification(-bet_amount);
+    displaycredits = credits;
 
     switch (guessMode) {
     case 0:
       if (card_next_number < card_number) {
         println("win");
-        payout += 100;
+        payout += bet_amount*2;
       } else {
         println("wrong");
         payout = 0;
@@ -63,7 +87,7 @@ class HighOrLow {
     case 1:
       if (card_next_number == card_number) {
         println("win");
-        payout += 1000;
+        payout += bet_amount*2;
       } else {
         println("wrong");
         payout = 0;
@@ -74,13 +98,20 @@ class HighOrLow {
     case 2:
       if (card_next_number > card_number) {
         println("win");
-        payout += 100;
+        payout += bet_amount*2;
       } else {
         println("wrong");
         payout = 0;
       }
       break;
     }
+
+
+
+    for (int i = 0; i < bet_buttons.size(); i++) {
+      bet_buttons.get(i).disabled = payout != 0;
+    }
+
     generate_next();
   }
 
@@ -90,22 +121,59 @@ class HighOrLow {
     card_next_number = int(random(2, 14));
   }
 
+  void change_bet(boolean increase) {
+    if (increase) {
+      bet_amount = min(bet_amount + 10, 100);
+    } else {
+      bet_amount = min(bet_amount - 10, 100);
+    }
+
+    if (bet_amount == 0) {
+      for (int i = 0; i < buttons.size(); i++) {
+        buttons.get(i).disabled = true;
+      }
+    } else {
+      for (int i = 0; i < buttons.size(); i++) {
+        buttons.get(i).disabled = false;
+      }
+    }
+  }
+
+  void fold() {
+    credit_notification(payout);
+    credits += payout;
+    payout = 0;
+
+    for (int i = 0; i < bet_buttons.size(); i++) {
+      bet_buttons.get(i).disabled = payout != 0;
+    }
+  }
+
   void display() {
     pushMatrix();
     fill(255);
     textSize(200);
     textAlign(CENTER, TOP);
     text(card_number, width/2, height*0.05);
-    
-    
-    textSize(150);
+
+
+    textSize(100);
     text(payout, width/2, height*0.25);
-    
+
+
+    textSize(100);
+    text(bet_amount, width/2, height*0.65);
+
     popMatrix();
 
     for (int i = 0; i < buttons.size(); i++) {
       buttons.get(i).draw();
     }
+    for (int n = 0; n < bet_buttons.size(); n++) {
+      bet_buttons.get(n).draw();
+    }
+
+    fold_button.draw();
   }
 
   void BigButton(int x, int y) {

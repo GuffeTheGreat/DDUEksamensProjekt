@@ -79,9 +79,7 @@ class Game {
         slot.speen();
       }
 
-      if (flashing) {
-        increment_credits_counter_smooth();
-      }
+
     }
 
 

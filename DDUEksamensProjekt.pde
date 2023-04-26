@@ -220,6 +220,8 @@ void draw() {
     fill(0);
     textSize(height/96*3);
     text("Moolah: " + int(ceil(displaycredits)), width - 150, height/96 + height/34);
+
+    increment_credits_counter_smooth();
   }
 
 
@@ -232,7 +234,7 @@ void draw() {
 }
 
 void increment_credits_counter_smooth() {
-  displaycredits = (lerp(displaycredits, credits, 0.015));
+  displaycredits = (lerp(displaycredits, credits, 0.035));
 }
 
 
@@ -298,6 +300,15 @@ void mousePressed() {
       if (Game3.buttons.get(i).isClicked()) {
         Game3.guess(i);
       }
+    }
+    for (int i = 0; i < Game3.bet_buttons.size(); i++) {
+      if (Game3.bet_buttons.get(i).isClicked()) {
+        Game3.change_bet(i == 1);
+      }
+    }
+
+    if (Game3.fold_button.isClicked()) {
+      Game3.fold();
     }
     if (Tilbage.isClicked()) {
       page = 3;

@@ -2,6 +2,7 @@ class Button {
   String label;
   int x, y, w, h;
   boolean clicked;
+  boolean disabled = false;
 
   Button(String label, int x, int y, int w, int h) {
     this.label = label;
@@ -16,6 +17,11 @@ class Button {
     stroke(0);
     strokeWeight(2);
     fill(255);
+    
+    if (disabled){
+      fill(90);
+    }
+    
     if (isHover() && !mousePressed){
       fill(155);
     }
@@ -27,7 +33,7 @@ class Button {
   }
 
   boolean isClicked() {
-    if (mousePressed && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
+    if (!disabled && mousePressed && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
       clicked = true;
     } else {
       clicked = false;
@@ -36,7 +42,7 @@ class Button {
   }
 
   boolean isHover() {
-    if (mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
+    if (!disabled && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
       return true;
     }
     return false;
