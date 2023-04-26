@@ -6,13 +6,10 @@ SoundFile win_sound;
 SoundFile slot_machine_start;
 SoundFile slot_machine_wheelstop;
 
-int page = 2;
-int loadingcounter = 0;
-int a = 0;
-int totalPageCount = 60;
-int credits = 500;
 
 
+
+int credits = 20000;
 float displaycredits = credits;
 
 //Credit Notification
@@ -22,12 +19,11 @@ float credit_notif_alpha = 1.0;
 float credit_notif_y_pos = height/34;
 
 
-int page = 2; 
+int page = 2;
 float loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
 int treecounter = 11;
-int credits = 20000;
 int load;
 int tredjedel = width/3;
 String name = "Green Jackpot Casino";
@@ -45,14 +41,14 @@ Button Tilbage;
 
 Game Game1;
 Game Game2;
-Game Game3;
+HighOrLow Game3;
 Game Game4;
 
 
 void setup() {
 
   // Fullscreen
-  fullScreen();
+  fullScreen(P2D);
 
   // FrameRate
   frameRate(60);
@@ -80,7 +76,7 @@ void setup() {
 
   Game1 = new Game("Totem Lightning", 1);
   Game2 = new Game("Fruit Spins", 2);
-  Game3 = new Game("777 Win", 3);
+  Game3 = new HighOrLow("777 Win", 3);
   Game4 = new Game("Slots", 4);
 }
 
@@ -174,7 +170,7 @@ void draw() {
     Konto.draw();
     Leaderboard.draw();
     textSize(256);
-    text(charity,width/2,height/5);
+    text(charity, width/2, height/5);
     break;
   case 3:
     background(255);
@@ -195,59 +191,52 @@ void draw() {
     text("De helt nye", 3*width/4, height/3+10);
     break;
   case 4:
-    background(0);
-    Game1.draw();
+    background(100);
+    Game1.display();
     Tilbage.draw();
     break;
   case 5:
-    Game2.draw();
+    Game2.display();
     Tilbage.draw();
     break;
   case 6:
-    Game3.draw();
+    background(0, 120, 72);
+    Game3.display();
     Tilbage.draw();
     break;
   case 7:
-    Game4.draw();
+    Game4.display();
     Tilbage.draw();
     break;
   }
-  
-  
-  
-  stroke(2);
-  fill(255);
-  rect(width -300, height/96, 300 - height/96,height/16);
-  textAlign(CENTER,CENTER);
-  fill(0);
-  textSize(height/96*3);
-  text("Moolah: " + int(ceil(displaycredits)),width - 150,height/96 + height/34);
-  
-  
-  textAlign(RIGHT,CENTER);
-  credit_notif_alpha = lerp(credit_notif_alpha,0.0,0.05);
-  credit_notif_y_pos = lerp(credit_notif_y_pos,height/96.0 + height/34.0 + 100.0, 0.05);
-  fill(credit_notif_col,int(credit_notif_alpha));
-  textSize(height/96*3);
-  text(credit_notif_number,width - 75,credit_notif_y_pos);
-  
-}
 
-void increment_credits_counter_smooth(){
-  displaycredits = (lerp(displaycredits,credits,0.015));
-
-}
 
   if (page != 1) {
+
     stroke(2);
     fill(255);
     rect(width -300, height/96, 300 - height/96, height/16);
     textAlign(CENTER, CENTER);
     fill(0);
     textSize(height/96*3);
-    text("Spundulix: " + credits, width - 150, height/96 + height/34);
+    text("Moolah: " + int(ceil(displaycredits)), width - 150, height/96 + height/34);
   }
+
+
+  textAlign(RIGHT, CENTER);
+  credit_notif_alpha = lerp(credit_notif_alpha, 0.0, 0.05);
+  credit_notif_y_pos = lerp(credit_notif_y_pos, height/96.0 + height/34.0 + 100.0, 0.05);
+  fill(credit_notif_col, int(credit_notif_alpha));
+  textSize(height/96*3);
+  text(credit_notif_number, width - 75, credit_notif_y_pos);
 }
+
+void increment_credits_counter_smooth() {
+  displaycredits = (lerp(displaycredits, credits, 0.015));
+}
+
+
+
 void mousePressed() {
   switch (page) {
   case 2:
@@ -269,7 +258,27 @@ void mousePressed() {
     }
     break;
   case 4:
-    Game1.spin();
+    //Game1.spin();
+
+    for (int i = 0; i < Game1.line_buttons.size(); i++) {
+      if (Game1.line_buttons.get(i).isClicked()) {
+        Game1.bet_amount = 4-i;
+      }
+    }
+
+    if (Game1.SpinButton.isClicked()) {
+      Game1.spin();
+    }
+
+    if (Game1.PayoutTableButton.isClicked() && Game1.canSpin) {
+      Game1.chart_showing = true;
+    }
+
+    if (Game1.chart_showing && mouseX >= width - width/15 - 60 && mouseX <= width - width/15 && mouseY >= height/15 && mouseY <= height/15 + 60) {
+      Game1.chart_showing = false;
+    }
+
+
     if (Tilbage.isClicked()) {
       page = 3;
     }
@@ -283,7 +292,13 @@ void mousePressed() {
     println("bruh");
     break;
   case 6:
-    Game3.spin();
+    //Game3.spin();
+
+    for (int i = 0; i < Game3.buttons.size(); i++) {
+      if (Game3.buttons.get(i).isClicked()) {
+        Game3.guess(i);
+      }
+    }
     if (Tilbage.isClicked()) {
       page = 3;
     }
@@ -297,22 +312,20 @@ void mousePressed() {
     println("bruh");
     break;
   }
-  
-  
 }
 
-void credit_notification(int amount){
-  
+void credit_notification(int amount) {
+
   credit_notif_number = "";
-  if (amount > 0){
-    credit_notif_col = color(0,255,0);
+  if (amount > 0) {
+    credit_notif_col = color(0, 255, 0);
     credit_notif_number = "+";
   } else {
-    
-    credit_notif_col = color(255,0,0);
+
+    credit_notif_col = color(255, 0, 0);
   }
-  
-    credit_notif_alpha = 255.0;
-    credit_notif_number += amount;
-    credit_notif_y_pos = height/96.0 + height/25.0;
+
+  credit_notif_alpha = 255.0;
+  credit_notif_number += amount;
+  credit_notif_y_pos = height/96.0 + height/25.0;
 }

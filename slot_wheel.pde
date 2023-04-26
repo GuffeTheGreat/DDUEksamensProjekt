@@ -23,7 +23,7 @@ class slot_wheel {
     for (int i = 0; i < 8; i++){
     
       int rng = int(random(0,random_numbers.length));
-      symbols.add(new Symbol(random_numbers[rng], new PVector(location.x,location.y - (250 * i) + 500),location.y - (250 * 6)));
+      symbols.add(new Symbol(random_numbers[rng], new PVector(location.x,location.y - (250 * i) + 500),250 - (250 * 6),location.y));
       
       
       int sub1 = random_numbers[random_numbers.length-1];
@@ -88,7 +88,7 @@ class slot_wheel {
     int [] return_symbols = new int[3];
     
     for(int i = 0; i < symbols.size();i++){
-      if ((symbols.get(i).location.y > 200.0 && symbols.get(i).location.y < 300)){
+      if ((symbols.get(i).location.y > -10.0 && symbols.get(i).location.y < 10.0)){
       return_symbols[0] = (symbols.get(i).symbol_idx) + 1;
       return_symbols[1] = (symbols.get((i-1+8)%8).symbol_idx) + 1;
       return_symbols[2] = (symbols.get((i-2+8)%8).symbol_idx) + 1;
@@ -109,26 +109,28 @@ class Symbol{
   PImage symbol_images = loadImage("Symboler.png");
   PVector location;
   float spawn_y_pos;
+  float offset_y;
   int symbol_idx;
   
-  Symbol(int idx, PVector loc,float spawn_y){
+  Symbol(int idx, PVector loc,float spawn_y,float off){
   symbol_idx = idx;
   location = loc;
   spawn_y_pos = spawn_y;
+  offset_y = off;
   }
   
   void display(){
       
-          if (location.y > 1000){
+          if (location.y > 775){
             symbol_idx = int(random(0,8));
             location.y = spawn_y_pos;
           }
-    if (location.y < 225 || location.y > 775){
+    if (location.y < 0 || location.y > 500){
       return;
     }
     
     PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
-      image(new_img,location.x,location.y);
+      image(new_img,location.x,location.y + offset_y);
 
       }
   

@@ -16,11 +16,14 @@ class Button {
     stroke(0);
     strokeWeight(2);
     fill(255);
+    if (isHover() && !mousePressed){
+      fill(155);
+    }
     rect(x, y, w, h);
     fill(0);
     textAlign(CENTER, CENTER);
     textSize(h/3);
-    text(label, x + w/2,  y+h/2-h/12);
+    text(label, x + w/2, y+h/2-h/12);
   }
 
   boolean isClicked() {
@@ -30,5 +33,12 @@ class Button {
       clicked = false;
     }
     return clicked;
+  }
+
+  boolean isHover() {
+    if (mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
+      return true;
+    }
+    return false;
   }
 }
