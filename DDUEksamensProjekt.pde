@@ -56,7 +56,7 @@ void setup() {
   frameRate(60);
 
   font1 = createFont("Font1.TTF", 1);
-  font2 = createFont("Font2.TTF", 1);
+  font2 = createFont("Font2.ttf", 1);
   font3 = createFont("Font3.TTF", 1);
   font4 = createFont("Font4.TTF", 1);
 
@@ -173,8 +173,12 @@ void draw() {
       image(Tree[12], 0, 0, width, height);
       image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
-      fill(223, 180, 83);
+
+      fill(0);
       textFont(font1);
+      textSize(129);
+      text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
+      fill(223, 180, 83);
       textSize(128);
       text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
       changed = false;
@@ -193,15 +197,25 @@ void draw() {
       Game2.BigButton(2*width/30+width/5, height/3+40);
       Game3.BigButton(4*width/30+2*width/5, height/3+40);
       Game4.BigButton(5*width/30+3*width/5, height/3+40);
-      fill(223, 180, 83);
+
       textFont(font3);
+      fill(223, 180, 83);
       textAlign(CENTER);
       textSize(height/3-20);
       text("SPIL", width/2, height/2-height/4);
+
       textFont(font1);
+
+      fill(0);
       textSize(height/12);
-      text("Klassikerne", width/4, height/3+10);
-      text("De helt nye", 3*width/4, height/3+10);
+      text("Klassikerne", width/4+1, height/3+1);
+      text("De helt nye", 3*width/4+1, height/3+1);
+      fill(223, 180, 83);
+      textSize(height/12);
+      text("Klassikerne", width/4, height/3);
+      text("De helt nye", 3*width/4, height/3);
+
+
       stroke(0);
       line(width/2, height/3-50, width/2, height-height/24);
       line(width/4, height/3-80, width*3/4, height/3-80);
