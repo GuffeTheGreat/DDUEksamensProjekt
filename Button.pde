@@ -1,10 +1,10 @@
 class Button {
   String label;
-  int x, y, w, h, r, g, b, v,t;
+  int x, y, w, h, r, g, b, v, t;
   boolean clicked;
   boolean disabled = false;
 
-  Button(String label, int x, int y, int w, int h, int r, int g, int b, int v,int t) {
+  Button(String label, int x, int y, int w, int h, int r, int g, int b, int v, int t) {
     this.label = label;
     this.x = x;
     this.y = y;
@@ -22,14 +22,15 @@ class Button {
     stroke(223, 180, 83);
     strokeWeight(2);
     fill(255);
-    
-    if (disabled){
-      fill(90);
+
+
+
+    fill(r, g, b, v);
+    if (isHover() && !mousePressed) {
+      fill(166);
     }
-    
-    fill(r,g,b,v);
-    if (isHover() && !mousePressed){
-      fill(104);
+    if (disabled) {
+      fill(75);
     }
     rect(x, y, w, h);
     fill(t);

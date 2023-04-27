@@ -18,8 +18,10 @@ class HighOrLow {
 
   ArrayList<Button> buttons = new ArrayList<Button>();
   ArrayList<Button> bet_buttons = new ArrayList<Button>();
-  Button fold_button = new Button("Stop", width/2 -150, int(height*0.8), 300, 150);
+  Button fold_button = new Button("Stop", width/2 -150, int(height*0.8), 300, 150, 255, 255, 255, 255, 0);
 
+  Card card1 = new Card(new PVector(width/2, 10), card_number);
+  Card card2 = new Card(new PVector(width/2, -1000), card_number);
 
   HighOrLow(String name, int id) {
     this.name = name;
@@ -45,7 +47,7 @@ class HighOrLow {
         break;
       }
 
-      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.5), 250, 150));
+      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.5), 250, 150, 255, 255, 255, 255, 0));
       buttons.get(i).disabled = true;
     }
 
@@ -61,14 +63,13 @@ class HighOrLow {
         button_name = "+";
         break;
       }
-      bet_buttons.add(new Button(button_name, width/2 - (300*(1-n)) + 100, int(height*0.675), 100, 100));
-      buttons.add(new Button(button_name, width/2 - (300*(2-i)) + 180, int(height*0.6), 250, 150,0,0,0,400,255));
+      bet_buttons.add(new Button(button_name, width/2 - (300*(1-n)) + 100, int(height*0.675), 100, 100, 255, 255, 255, 255, 0));
     }
   }
 
   void guess(int guessMode) {
 
-
+    CardFlip.play();
     credits -= bet_amount;
     credit_notification(-bet_amount);
     displaycredits = credits;
@@ -118,15 +119,22 @@ class HighOrLow {
 
 
   void generate_next() {
+    card2 = card1.dupe();
+    card1.location.y = -500;
     card_number = card_next_number;
+    card1.idx = card_number;
+    card1.generate_icon();
+    card1.generate_number();
     card_next_number = int(random(2, 14));
+    
+    
   }
 
   void change_bet(boolean increase) {
     if (increase) {
       bet_amount = min(bet_amount + 10, 100);
     } else {
-      bet_amount = min(bet_amount - 10, 100);
+      bet_amount = max(bet_amount - 10, 0);
     }
 
     if (bet_amount == 0) {
@@ -159,13 +167,18 @@ class HighOrLow {
 
 
     textSize(100);
-    text(payout, width/2, height*0.25);
+    text(payout, width/2, height*0.38);
 
 
     textSize(100);
     text(bet_amount, width/2, height*0.65);
 
     popMatrix();
+
+
+    card1.location.y = lerp(card1.location.y,10,0.1);
+    card2.display();
+    card1.display();
 
     for (int i = 0; i < buttons.size(); i++) {
       buttons.get(i).draw();
@@ -199,5 +212,98 @@ class HighOrLow {
       clicked = false;
     }
     return clicked;
+  }
+}
+
+
+
+class Card {
+
+  PVector location;
+  int idx;
+  String icon;
+  String number;
+  color col;
+
+  Card(PVector loc, int index) {
+    location = loc;
+    idx = index;
+    generate_icon();
+    generate_number();
+  }
+
+  void display() {
+    fill(255);
+    rect(location.x - 140, location.y, 140 * 2, 200 * 2, 20);
+    fill(col);
+    pushMatrix();
+    //textLeading(-20);
+    textSize(50);
+    textLeading(40);
+    textAlign(LEFT, TOP);
+    text(number +"\n" + icon, location.x-140 + 10, location.y + 10);
+
+    pushMatrix();
+    translate(location.x-140 + 280 - 10, location.y + 400-10);
+    rotate(radians(180));
+    //translate(280 - 10,400-10);
+    text(number +"\n" + icon, 0, 0);
+    popMatrix();
+    popMatrix();
+  }
+
+  void generate_icon() {
+    switch (int(random(0, 3))) {
+
+    case 0:
+      icon = "♥";
+      col = color(255, 0, 0);
+      break;
+
+    case 1:
+      icon = "♦";
+      col = color(255, 0, 0);
+      break;
+
+    case 2:
+      icon = "♣";
+      col = color(0);
+      break;
+
+    case 3:
+      icon = "♠";
+      col = color(0);
+      break;
+    }
+  }
+
+  void generate_number() {
+    switch (idx) {
+
+    case 11:
+      number = "J";
+      break;
+    case 12:
+      number = "Q";
+      break;
+    case 13:
+      number = "K";
+      break;
+    case 14:
+      number = "A";
+      break;
+
+    default:
+      number = str(idx);
+      break;
+    }
+  }
+  
+  Card dupe(){
+  
+    Card new_card = new Card(new PVector(location.x,location.y),idx);
+    new_card.icon = icon;
+    new_card.col = col;
+    return new_card;
   }
 }

@@ -5,6 +5,8 @@ SoundFile win_sound;
 SoundFile slot_machine_start;
 SoundFile slot_machine_wheelstop;
 
+SoundFile CardFlip;
+
 int credits = 20000;
 float displaycredits = credits;
 
@@ -17,7 +19,7 @@ float credit_notif_y_pos = height/34;
 PFont font1;
 PFont font2;
 
-int page = 1;
+int page = 2;
 float loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
@@ -40,7 +42,7 @@ Button Tilbage;
 Game Game1;
 Game Game2;
 HighOrLow Game3;
-Game Game4;
+roulette Game4;
 
 
 void setup() {
@@ -58,6 +60,8 @@ void setup() {
   win_sound = new SoundFile(this, "winsound.wav");
   slot_machine_start = new SoundFile(this, "click.wav");
   slot_machine_wheelstop = new SoundFile(this, "slotwheelstop.wav");
+  
+  CardFlip = new SoundFile(this, "cardflip.wav");
 
   // Title
   surface.setTitle(name);
@@ -78,7 +82,7 @@ void setup() {
   Game1 = new Game("Forest Fortune", 1);
   Game2 = new Game("Monkey Mayhem", 2);
   Game3 = new HighOrLow("777 Win", 3);
-  Game4 = new Game("Slots", 4);
+  Game4 = new roulette("Slots", 4);
 }
 
 void draw() {
@@ -215,6 +219,8 @@ void draw() {
     Tilbage.draw();
     break;
   case 7:
+    
+    background(0, 120, 72);
     Game4.display();
     Tilbage.draw();
     break;
@@ -326,7 +332,7 @@ void mousePressed() {
     println("bruh");
     break;
   case 7:
-    Game4.spin();
+    //Game4.spin();
     if (Tilbage.isClicked()) {
       page = 3;
     }
