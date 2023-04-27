@@ -4,6 +4,7 @@ import processing.sound.*; //<>// //<>//
 SoundFile win_sound;
 SoundFile slot_machine_start;
 SoundFile slot_machine_wheelstop;
+SoundFile spin_sound;
 
 SoundFile CardFlip;
 
@@ -60,7 +61,8 @@ void setup() {
   win_sound = new SoundFile(this, "winsound.wav");
   slot_machine_start = new SoundFile(this, "click.wav");
   slot_machine_wheelstop = new SoundFile(this, "slotwheelstop.wav");
-  
+  spin_sound = new SoundFile(this, "spin.wav");
+
   CardFlip = new SoundFile(this, "cardflip.wav");
 
   // Title
@@ -219,7 +221,7 @@ void draw() {
     Tilbage.draw();
     break;
   case 7:
-    
+
     background(0, 120, 72);
     Game4.display();
     Tilbage.draw();
@@ -235,7 +237,7 @@ void draw() {
     textAlign(CENTER, CENTER);
     fill(0);
     textSize(height/96*3);
-    text("Moolah: " + int(ceil(displaycredits)), width - 150, height/96 + height/34);
+    text("Moolah: " + int(round(displaycredits)), width - 150, height/96 + height/34);
 
     increment_credits_counter_smooth();
   }
@@ -333,10 +335,37 @@ void mousePressed() {
     break;
   case 7:
     //Game4.spin();
-    if (Tilbage.isClicked()) {
-      page = 3;
+    if (Game4.spinning == false) {
+      boolean isEmpty = true;
+      for (int i = 0; i < Game4.Bet_Buttons.size(); i++) {
+
+        if (Game4.Bet_Buttons.get(i).isClicked()) {
+          Game4.Chips[i].change_bet(true);
+        }
+        if (Game4.Bet_Buttons.get(i).isRightClicked()) {
+          Game4.Chips[i].change_bet(false);
+        }
+
+        if (Game4.Chips[i].chip_lvl > 0) {
+          isEmpty = false;
+        }
+      }
+
+      if (isEmpty) {
+        Game4.Spin_Button.disabled = true;
+      } else {
+        Game4.Spin_Button.disabled = false;
+      }
+
+
+      if (Game4.Spin_Button.isClicked()) {
+        Game4.start_spinning();
+      }
+      //Game4.start_spinning();
+      if (Tilbage.isClicked()) {
+        page = 3;
+      }
     }
-    println("bruh");
     break;
   }
 }

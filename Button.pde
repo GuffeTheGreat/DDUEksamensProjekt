@@ -41,7 +41,17 @@ class Button {
   }
 
   boolean isClicked() {
-    if (!disabled && mousePressed && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
+    if (!disabled && mousePressed && mouseButton == (LEFT) && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
+      clicked = true;
+    } else {
+      clicked = false;
+    }
+    return clicked;
+  }
+  
+  
+  boolean isRightClicked() {
+    if (!disabled && mousePressed && mouseButton == (RIGHT) && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
       clicked = true;
     } else {
       clicked = false;
