@@ -126,8 +126,6 @@ class HighOrLow {
     card1.generate_icon();
     card1.generate_number();
     card_next_number = int(random(2, 14));
-    
-    
   }
 
   void change_bet(boolean increase) {
@@ -176,7 +174,7 @@ class HighOrLow {
     popMatrix();
 
 
-    card1.location.y = lerp(card1.location.y,10,0.1);
+    card1.location.y = lerp(card1.location.y, 10, 0.1);
     card2.display();
     card1.display();
 
@@ -191,19 +189,23 @@ class HighOrLow {
   }
 
   void BigButton(int x, int y) {
-    stroke(0);
-    fill(255);
+    stroke(223, 180, 83);
+    strokeWeight(2);
+    fill(255, 255, 255, 200);
     rect(x, y, width/5, 3*height/5-60);
     image(preview, x+(width/5)/10, y+(3*height/5-60)/10, width/5-(width/5)/5, (3*height/5-60-(3*height/5-60)/5)/2);
     fill(0);
-    textSize(height/20);
     float textWidth = textWidth(name);
-    text(name, (x+textWidth/2)+(width/5-textWidth)/2, height/2+(2*((3*height/5-60)/6.5)));
+    textFont(font2);
+    textSize(height/25);
+    text(name, (x+textWidth/2)+(width/5-textWidth)/2, height/2+(2*((3*height/5-60)/6.5))+7);
     x2 = x+(width/5)/10+5;
     y2 = height-height/3+height/20;
     w2 = width/5-(width/5)/5-10;
     h2 = (3*height/5-60-(3*height/5-60)/5)/2-height/20;
+    fill(0, 0, 0, 200);
     rect(x2, y2, w2, h2);
+    image(Tree[14], x2+w2/2-h2/2+h2*1/6, y2+h2*1/6, h2*2/3, h2*2/3);
   }
   boolean BigIsClicked() {
     if (mousePressed && mouseX >= x2 && mouseX <= x2 + w2 && mouseY >= y2 && mouseY <= y2 + h2) {
@@ -238,6 +240,7 @@ class Card {
     fill(col);
     pushMatrix();
     //textLeading(-20);
+    textFont(font4);
     textSize(50);
     textLeading(40);
     textAlign(LEFT, TOP);
@@ -298,10 +301,10 @@ class Card {
       break;
     }
   }
-  
-  Card dupe(){
-  
-    Card new_card = new Card(new PVector(location.x,location.y),idx);
+
+  Card dupe() {
+
+    Card new_card = new Card(new PVector(location.x, location.y), idx);
     new_card.icon = icon;
     new_card.col = col;
     return new_card;

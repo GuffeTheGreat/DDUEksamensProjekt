@@ -35,7 +35,7 @@ class Button {
     rect(x, y, w, h);
     fill(t);
     textAlign(CENTER, CENTER);
-    textFont(font2);
+    textFont(font4);
     textSize(h/3);
     text(label, x + w/2, y+h/2-h/12);
   }
