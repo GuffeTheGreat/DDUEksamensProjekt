@@ -19,7 +19,7 @@ class Game {
   PVector[] line_positions = new PVector[3];
   boolean show_result = false;
   int win_amount = 0;
-  
+
   int bet_amount = 0;
 
 
@@ -39,11 +39,11 @@ class Game {
   Game(String name, int id) {
     this.name = name;
     this.id = id;
-    SpinButton = new Button("Spin", width/2 - 90, height - 150, 180, 130,0,0,0,400,255);
-    PayoutTableButton = new Button("Payout Table thing", width/2 - 90, height - 220, 180, 50,0,0,0,400,255);
+    SpinButton = new Button("Spin", width/2 - 90, height - 150, 180, 130, 0, 0, 0, 400, 255);
+    PayoutTableButton = new Button("Payout Table thing", width/2 - 90, height - 220, 180, 50, 0, 0, 0, 400, 255);
 
     for (int a = 0; a < 4; a++) {
-      line_buttons.add(new Button((1 + 2*(3-a)) +"\nLines", width/2 - 250 - (a * 150), height - 150, 130, 130,0,0,0,400,255));
+      line_buttons.add(new Button((1 + 2*(3-a)) +"\nLines", width/2 - 250 - (a * 150), height - 150, 130, 130, 0, 0, 0, 400, 255));
     }
 
     preview = loadImage(id+".png");
@@ -78,8 +78,6 @@ class Game {
       if (slot.stopped == false) {
         slot.speen();
       }
-
-
     }
 
 
@@ -350,19 +348,23 @@ class Game {
 
 
   void BigButton(int x, int y) {
-    stroke(0);
-    fill(255);
+    stroke(223, 180, 83);
+    strokeWeight(2);
+    fill(255, 255, 255, 200);
     rect(x, y, width/5, 3*height/5-60);
     image(preview, x+(width/5)/10, y+(3*height/5-60)/10, width/5-(width/5)/5, (3*height/5-60-(3*height/5-60)/5)/2);
     fill(0);
-    textSize(height/20);
     float textWidth = textWidth(name);
-    text(name, (x+textWidth/2)+(width/5-textWidth)/2, height/2+(2*((3*height/5-60)/6.5)));
+    textFont(font2);
+    textSize(height/25);
+    text(name, (x+textWidth/2)+(width/5-textWidth)/2, height/2+(2*((3*height/5-60)/6.5))+7);
     x2 = x+(width/5)/10+5;
     y2 = height-height/3+height/20;
     w2 = width/5-(width/5)/5-10;
     h2 = (3*height/5-60-(3*height/5-60)/5)/2-height/20;
+    fill(0, 0, 0, 200);
     rect(x2, y2, w2, h2);
+    image(Tree[14], x2+w2/2-h2/2+h2*1/6, y2+h2*1/6, h2*2/3, h2*2/3);
   }
 
   boolean BigIsClicked() {

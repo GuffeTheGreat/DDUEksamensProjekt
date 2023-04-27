@@ -1,4 +1,4 @@
-import processing.sound.*; //<>// //<>//
+import processing.sound.*; //<>// //<>// //<>// //<>//
 
 // Sounds
 SoundFile win_sound;
@@ -18,6 +18,8 @@ float credit_notif_y_pos = height/34;
 
 PFont font1;
 PFont font2;
+PFont font3;
+PFont font4;
 
 int page = 2;
 float loadingcounter = 0;
@@ -54,13 +56,15 @@ void setup() {
   frameRate(60);
 
   font1 = createFont("Font1.TTF", 1);
-  font2 = createFont("Font2.tff", 1);
+  font2 = createFont("Font2.TTF", 1);
+  font3 = createFont("Font3.TTF", 1);
+  font4 = createFont("Font4.TTF", 1);
 
   // Load Sounds
   win_sound = new SoundFile(this, "winsound.wav");
   slot_machine_start = new SoundFile(this, "click.wav");
   slot_machine_wheelstop = new SoundFile(this, "slotwheelstop.wav");
-  
+
   CardFlip = new SoundFile(this, "cardflip.wav");
 
   // Title
@@ -94,16 +98,11 @@ void draw() {
   }
 
   // Background Opdaterer
-  /*
   if (changed == true) {
-   //println(page);
-   background(255);
-   changed = false;
-   }*/
+    println(page);
+  }
 
   // Load Side Elementer
-
-
   switch (page) {
   case 1:
     fill(0);
@@ -167,7 +166,6 @@ void draw() {
     loadingcounter = loadingcounter + 2;
     break;
   case 2:
-
     if (changed == true) {
       SpilNu.draw();
       Konto.draw();
@@ -185,24 +183,30 @@ void draw() {
       Leaderboard.draw();
     }
     break;
-
   case 3:
-    background(255);
-    Flere1.draw();
-    Flere2.draw();
-    Tilbage.draw();
-    Game1.BigButton(width/30, height/3+40);
-    Game2.BigButton(2*width/30+width/5, height/3+40);
-    Game3.BigButton(4*width/30+2*width/5, height/3+40);
-    Game4.BigButton(5*width/30+3*width/5, height/3+40);
-    fill(0);
-    textAlign(CENTER);
-    textSize(height/3-20);
-    text("SPIL", width/2, height/2-height/4);
-    line(width/2, height/3-50, width/2, height-height/24);
-    textSize(height/12);
-    text("Mest Populære", width/4, height/3+10);
-    text("De helt nye", 3*width/4, height/3+10);
+    if (changed == true) {
+      image(Tree[12], 0, 0, width, height);
+      Flere1.draw();
+      Flere2.draw();
+      Tilbage.draw();
+      Game1.BigButton(width/30, height/3+40);
+      Game2.BigButton(2*width/30+width/5, height/3+40);
+      Game3.BigButton(4*width/30+2*width/5, height/3+40);
+      Game4.BigButton(5*width/30+3*width/5, height/3+40);
+      fill(223, 180, 83);
+      textFont(font3);
+      textAlign(CENTER);
+      textSize(height/3-20);
+      text("SPIL", width/2, height/2-height/4);
+      textFont(font1);
+      textSize(height/12);
+      text("Klassikerne", width/4, height/3+10);
+      text("De helt nye", 3*width/4, height/3+10);
+      stroke(0);
+      line(width/2, height/3-50, width/2, height-height/24);
+      line(width/4, height/3-80, width*3/4, height/3-80);
+      changed = false;
+    }
     break;
   case 4:
     background(100);
@@ -210,6 +214,7 @@ void draw() {
     Tilbage.draw();
     break;
   case 5:
+    background(100);
     Game2.display();
     Tilbage.draw();
     break;
@@ -219,7 +224,7 @@ void draw() {
     Tilbage.draw();
     break;
   case 7:
-    
+
     background(0, 120, 72);
     Game4.display();
     Tilbage.draw();
