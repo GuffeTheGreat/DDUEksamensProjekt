@@ -1,4 +1,4 @@
-import processing.sound.*; //<>// //<>// //<>// //<>//
+import processing.sound.*; //<>// //<>// //<>// //<>// //<>// //<>//
 
 int page = 2;
 
@@ -176,10 +176,11 @@ void draw() {
       image(Tree[12], 0, 0, width, height);
       image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
+      fill(0);
       textFont(font1);
       textSize(129);
       text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
-      fill(223, 180, 83);
+      fill(255);
       textSize(128);
       text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
       changed = false;
