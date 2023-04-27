@@ -240,6 +240,7 @@ class Card {
     fill(col);
     pushMatrix();
     //textLeading(-20);
+    textFont(font4);
     textSize(50);
     textLeading(40);
     textAlign(LEFT, TOP);

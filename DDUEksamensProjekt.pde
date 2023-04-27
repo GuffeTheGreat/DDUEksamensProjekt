@@ -1,5 +1,7 @@
 import processing.sound.*; //<>// //<>// //<>// //<>//
 
+int page = 2;
+
 // Sounds
 SoundFile win_sound;
 SoundFile slot_machine_start;
@@ -20,8 +22,8 @@ PFont font1;
 PFont font2;
 PFont font3;
 PFont font4;
+PFont font5;
 
-int page = 2;
 float loadingcounter = 0;
 int a = 0;
 int totalPageCount = 60;
@@ -59,6 +61,7 @@ void setup() {
   font2 = createFont("Font2.TTF", 1);
   font3 = createFont("Font3.TTF", 1);
   font4 = createFont("Font4.TTF", 1);
+  font5 = createFont("Font5.ttf", 1);
 
   // Load Sounds
   win_sound = new SoundFile(this, "winsound.wav");
@@ -79,14 +82,14 @@ void setup() {
   Leaderboard = new Button("Rangliste", width/24, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24), 10, 10, 10, 200, 255);
   SpilNu = new Button("Spil Nu", width/3, height/7+(2*(height/5)), width/3, 2*(height/5), 10, 10, 10, 200, 255);
   Konto = new Button("Konto", 2*width/3+width/48, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24), 10, 10, 10, 200, 255);
-  Flere1 = new Button("Flere", width/6, height-height/24-height/48, width/6, height/24, 10, 0, 0, 400, 255);
-  Flere2 = new Button("Flere", 4*width/6, height-3*height/48, width/6, height/24, 0, 0, 0, 400, 255);
-  Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16, 0, 0, 0, 400, 255);
+  Flere1 = new Button("Flere", width/6, height-height/24-height/48, width/6, height/24, 0, 0, 0, 200, 255);
+  Flere2 = new Button("Flere", 4*width/6, height-3*height/48, width/6, height/24, 0, 0, 0, 200, 255);
+  Tilbage = new Button("Tilbage", height/96, height/96, width/16, height/16, 0, 0, 0, 200, 255);
 
   Game1 = new Game("Forest Fortune", 1);
   Game2 = new Game("Monkey Mayhem", 2);
-  Game3 = new HighOrLow("777 Win", 3);
-  Game4 = new roulette("Slots", 4);
+  Game3 = new HighOrLow("Forest Flip", 3);
+  Game4 = new roulette("Tree-Top Roulette", 4);
 }
 
 void draw() {
@@ -173,7 +176,7 @@ void draw() {
       image(Tree[12], 0, 0, width, height);
       image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
-      fill(223, 180, 83);
+      fill(255);
       textFont(font1);
       textSize(128);
       text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
@@ -186,9 +189,9 @@ void draw() {
   case 3:
     if (changed == true) {
       image(Tree[12], 0, 0, width, height);
+      Tilbage.draw();
       Flere1.draw();
       Flere2.draw();
-      Tilbage.draw();
       Game1.BigButton(width/30, height/3+40);
       Game2.BigButton(2*width/30+width/5, height/3+40);
       Game3.BigButton(4*width/30+2*width/5, height/3+40);
@@ -206,24 +209,41 @@ void draw() {
       line(width/2, height/3-50, width/2, height-height/24);
       line(width/4, height/3-80, width*3/4, height/3-80);
       changed = false;
+      println("WOOO");
     }
     break;
   case 4:
+    if (changed == true) {
+      image(Tree[12], 0, 0, width, height);
+      Tilbage.draw();
+      fill(0, 0, 0, 200);
+      rect(width/4, height/8, 2*width/4, 6*height/8);
+      changed = false;
+    }
+    break;
+  case 5:
+    if (changed == true) {
+      image(Tree[12], 0, 0, width, height);
+      Tilbage.draw();
+      changed = false;
+    }
+    break;
+  case 6:
     background(100);
     Game1.display();
     Tilbage.draw();
     break;
-  case 5:
+  case 7:
     background(100);
     Game2.display();
     Tilbage.draw();
     break;
-  case 6:
+  case 8:
     background(0, 120, 72);
     Game3.display();
     Tilbage.draw();
     break;
-  case 7:
+  case 9:
 
     background(0, 120, 72);
     Game4.display();
@@ -239,8 +259,9 @@ void draw() {
     rect(width -300, height/96, 300 - height/96, height/16);
     textAlign(CENTER, CENTER);
     fill(0);
-    textSize(height/96*3);
-    text("Moolah: " + int(ceil(displaycredits)), width - 150, height/96 + height/34);
+    textFont(font1);
+    textSize(height/110*3);
+    text("Balance: $" + int(ceil(displaycredits)), width - 150, height/96 + height/34);
 
     increment_credits_counter_smooth();
   }
@@ -265,22 +286,36 @@ void mousePressed() {
   case 2:
     if (SpilNu.isClicked()) {
       page = 3;
+    } else if (Leaderboard.isClicked()) {
+      page = 4;
+    } else if (Konto.isClicked()) {
+      page = 5;
     }
     break;
   case 3:
     if (Tilbage.isClicked()) {
       page = 2;
     } else if (Game1.BigIsClicked()) {
-      page = 4;
-    } else if (Game2.BigIsClicked()) {
-      page = 5;
-    } else if (Game3.BigIsClicked()) {
       page = 6;
-    } else if (Game4.BigIsClicked()) {
+    } else if (Game2.BigIsClicked()) {
       page = 7;
+    } else if (Game3.BigIsClicked()) {
+      page = 8;
+    } else if (Game4.BigIsClicked()) {
+      page = 9;
     }
     break;
   case 4:
+    if (Tilbage.isClicked()) {
+      page = 2;
+    }
+    break;
+  case 5:
+    if (Tilbage.isClicked()) {
+      page = 2;
+    }
+    break;
+  case 6:
     //Game1.spin();
 
     for (int i = 0; i < Game1.line_buttons.size(); i++) {
@@ -307,14 +342,14 @@ void mousePressed() {
     }
     println("bruh");
     break;
-  case 5:
+  case 7:
     Game2.spin();
     if (Tilbage.isClicked()) {
       page = 3;
     }
     println("bruh");
     break;
-  case 6:
+  case 8:
     //Game3.spin();
 
     for (int i = 0; i < Game3.buttons.size(); i++) {
@@ -336,7 +371,7 @@ void mousePressed() {
     }
     println("bruh");
     break;
-  case 7:
+  case 9:
     //Game4.spin();
     if (Tilbage.isClicked()) {
       page = 3;
