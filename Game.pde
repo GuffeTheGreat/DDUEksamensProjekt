@@ -15,9 +15,18 @@ class Game {
   boolean isSpinning = false;
   boolean flashing = false;
 
+  int[][] actual_result = new int[3][5];
   int[][] game_result = new int[3][5];
-  PVector[] line_positions = new PVector[3];
   boolean show_result = false;
+
+  //Win condition variables
+
+  PVector[] line_positions = new PVector[3];
+  boolean[] vertical_lines = new boolean[5];
+  boolean isVshape = false;
+  boolean isAshape = false;
+
+
   int win_amount = 0;
 
   int bet_amount = 0;
@@ -124,22 +133,48 @@ class Game {
 
           if (flashing) {
             if (sin(millis()/20) < 0.5) {
-              line(340 + (300 * line_positions[a].x), 225 + (250 * a), 340 + (300 * line_positions[a].x)+ (300 * line_positions[a].y), 225 + (250 * a));
+              line(340 + (310 * line_positions[a].x), 225 + (250 * a), 340 + (310 * line_positions[a].x)+ (310 * line_positions[a].y), 225 + (250 * a));
             }
           } else {
 
-            line(340 + (300 * line_positions[a].x), 225 + (250 * a), 340 + (300 * line_positions[a].x)+ (300 * line_positions[a].y), 225 + (250 * a));
+            line(340 + (310 * line_positions[a].x), 225 + (250 * a), 340 + (310 * line_positions[a].x)+ (310 * line_positions[a].y), 225 + (250 * a));
           }
         }
       }
 
       //The A shape with no brim
-      //line(340,850,width/2 - 25,350);
-      //line(width/2 -25,350,width - 360,850);
+      if (isAshape) {
+
+        if (flashing) {
+          if (sin(millis()/20) < 0.5) {
+
+            line(340, 850-125, width/2, 225);
+            line(width/2, 225, width - 340, 850-125);
+          }
+        } else {
+
+          line(340, 850-125, width/2, 225);
+          line(width/2, 225, width - 340, 850-125);
+        }
+      }
+
 
       //The V shape with no brim
-      //line(340,350,width/2 - 25,850);
-      //line(width/2 -25,850,width - 360,350);
+
+      if (isVshape) {
+
+        if (flashing) {
+          if (sin(millis()/20) < 0.5) {
+
+            line(340, 225, width/2, 850-125);
+            line(width/2, 850-125, width - 340, 225);
+          }
+        } else {
+
+          line(340, 225, width/2, 850-125);
+          line(width/2, 850-125, width - 340, 225);
+        }
+      }
 
 
 
@@ -152,6 +187,24 @@ class Game {
           flashing = false;
         }
       }
+
+
+      //Vertical_lines Lines
+      for (int i = 0; i < 5; i++) {
+
+
+        if (vertical_lines[i]) {
+
+          if (flashing) {
+            if (sin(millis()/20) < 0.5) {
+              line(340 + (310 * i), 225, 340 + (310 * i), 850-125);
+            }
+          } else {
+
+            line(340 + (310 * i), 225, 340 + (310 * i), 850-125);
+          }
+        }
+      }
     }
 
     if (chart_showing) {
@@ -159,11 +212,13 @@ class Game {
     } else {
       chart_y_position = lerp(chart_y_position, height, 0.2);
     }
-    image(payout_chart, width/15, (chart_y_position), width - (width/15)*2, height - (height/15)*2);
+    if (chart_y_position > height) {
+      image(payout_chart, width/15, (chart_y_position), width - (width/15)*2, height - (height/15)*2);
+    }
   }
 
   void spin() {
-    if (canSpin && credits >= bet_amount * 15 && !chart_showing) {
+    if (canSpin && credits >= bet_amount * 15 && !chart_showing && bet_amount > 0) {
       win_amount = 0;
       slot_machine_start.play();
       canSpin = false;
@@ -172,6 +227,11 @@ class Game {
       displaycredits = credits;
       show_result = false;
       game_result = new int[3][5];
+      actual_result = new int[3][5];
+      isVshape = false;
+      isAshape = false;
+      vertical_lines = new boolean[5];
+
       for (int i = 0; i < Slots.size(); i++) {
         Slots.get(i).stopped = false;
         Slots.get(i).start_time = millis();
@@ -220,22 +280,46 @@ class Game {
 
       for (int i = 0; i < Slots.size(); i++) {
 
-        for (int n = 0; n < 3; n++) {
+        if (bet_amount != 1) {
 
-          if (i == 0) {
-            //Adds Value to first columns
-            temp_rows[n][i]= slots_array[i][n];
-          } else {
+          for (int n = 0; n < 3; n++) {
 
-            //Is value different from last?
-            if (temp_rows[n][i-1] != slots_array[i][n]) {
-              temp_rows[n] = new int[5];
+            if (i == 0) {
+              //Adds Value to first columns
+              temp_rows[n][i]= slots_array[i][n];
+            } else {
+
+              //Is value different from last?
+              if (temp_rows[n][i-1] != slots_array[i][n]) {
+                temp_rows[n] = new int[5];
+              }
+
+              //Adds value
+              temp_rows[n][i] = slots_array[i][n];
+              if (get_array_content_size(temp_rows[n]) > get_array_content_size(best_rows[n])) {
+                best_rows[n] = temp_rows[n].clone();
+              }
             }
+          }
+        } else {
 
-            //Adds value
-            temp_rows[n][i] = slots_array[i][n];
-            if (get_array_content_size(temp_rows[n]) > get_array_content_size(best_rows[n])) {
-              best_rows[n] = temp_rows[n].clone();
+          for (int n = 1; n < 2; n++) {
+
+            if (i == 0) {
+              //Adds Value to first columns
+              temp_rows[n][i]= slots_array[i][n];
+            } else {
+
+              //Is value different from last?
+              if (temp_rows[n][i-1] != slots_array[i][n]) {
+                temp_rows[n] = new int[5];
+              }
+
+              //Adds value
+              temp_rows[n][i] = slots_array[i][n];
+              if (get_array_content_size(temp_rows[n]) > get_array_content_size(best_rows[n])) {
+                best_rows[n] = temp_rows[n].clone();
+              }
             }
           }
         }
@@ -250,6 +334,7 @@ class Game {
         println(printer);
       }
 
+      actual_result = slots_array;
       game_result = best_rows;
 
 
@@ -277,18 +362,65 @@ class Game {
   void check_for_wins() {
     boolean is_there_win = false;
     int win_ = 0;
+
+    //Horizontal Lines
+
     for (int i = 0; i < 3; i++) {
       if (get_array_content_size(game_result[i]) > 2) {
+
 
         int start_index = 0;
         while (game_result[i][start_index] == 0) {
           start_index++;
         }
 
-        win_ += 200 * (get_array_content_size(game_result[i]) - 2);
+        win_ += 25 * (get_array_content_size(game_result[i]) - 2)  * game_result[i][start_index];
+
+        println("Deez Nuts ha goteem " +game_result[i][start_index]);
+
         is_there_win = true;
       }
     }
+
+    //A and V shape
+    if (bet_amount >=3) {
+
+      //A Shape
+
+      int symbol2look4 = actual_result[0][2];
+
+
+      if (actual_result[0][2] == symbol2look4 && actual_result[1][1] == symbol2look4 && actual_result[2][0] == symbol2look4 && actual_result[3][1] == symbol2look4 && actual_result[4][2] == symbol2look4) {
+        isAshape = true;
+        is_there_win = true;
+        win_ += 125 * symbol2look4;
+
+      }
+
+
+      //V Shape
+
+      int symbol2look4_2 = actual_result[0][0];
+
+
+      if (actual_result[0][0] == symbol2look4_2 && actual_result[1][1] == symbol2look4_2 && actual_result[2][2] == symbol2look4_2 && actual_result[3][1] == symbol2look4_2 && actual_result[4][0] == symbol2look4_2) {
+        isVshape = true;
+        is_there_win = true;
+        win_ += 125 * symbol2look4_2;
+      }
+    }
+
+    //Verical Lines
+    if (bet_amount == 4) {
+      for (int i = 0; i < 5; i++) {
+        if (actual_result[i][0] == actual_result[i][1] && actual_result[i][0] == actual_result[i][2]) {
+          vertical_lines[i] = true;
+          is_there_win  = true;
+          win_ += 25 * actual_result[i][0];
+        }
+      }
+    }
+
 
     if (is_there_win) {
       flashing = true;

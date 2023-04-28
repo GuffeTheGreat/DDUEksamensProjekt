@@ -33,7 +33,7 @@ int load = 1;
 int tredjedel = width/3;
 String name = "Green Jackpot Casino";
 boolean changed;
-int charity = 748343;
+int charity = 0;
 
 PImage Tree[] = new PImage[treecounter+1];
 
@@ -61,7 +61,7 @@ void setup() {
   font1 = createFont("Font1.TTF", 1);
   font2 = createFont("Font2.ttf", 1);
   font3 = createFont("Font3.TTF", 1);
-  font4 = createFont("Font4.TTF", 1);
+  font4 = createFont("arial.tff", 1);
   font5 = createFont("Font5.ttf", 1);
 
   // Load Sounds
@@ -104,7 +104,7 @@ void draw() {
 
   // Background Opdaterer
   if (changed == true) {
-    println(page);
+    //println(page);
   }
 
   // Load Side Elementer
@@ -258,7 +258,6 @@ void draw() {
     Game3.display();
     Tilbage.draw();
     break;
-  case 7:
   case 9:
 
     background(0, 120, 72);

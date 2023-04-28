@@ -17,6 +17,7 @@ class roulette {
   Button Spin_Button;
 
   bet_chip[] Chips = new bet_chip[36];
+  bet_chip[] tutorial_chips = new bet_chip[4];
 
 
   roulette(String name, int id) {
@@ -37,6 +38,12 @@ class roulette {
       }
     }
 
+    for (int i = 0; i < tutorial_chips.length; i++) {
+      tutorial_chips[i] = new bet_chip(new PVector(20, height/6+ 100*i));
+      tutorial_chips[i].chip_lvl = i;
+      tutorial_chips[i].change_bet(true);
+    }
+
     for (int n = 0; n<36; n++) {
 
       Chips[n] = new bet_chip( new PVector(width/2 - 600 + 100*(n%12), height-310 + 100* ceil((n)/12)));
@@ -52,11 +59,11 @@ class roulette {
       take_amount -= Chips[i].chip_lvl * 25;
     }
     credits += take_amount;
+    charity += abs(take_amount);
     credit_notification(take_amount);
   }
 
   void display() {
-
 
     stroke(0);
     fill(70, 20, 15);
@@ -81,7 +88,7 @@ class roulette {
     strokeWeight(2.0);
     for (int i = 0; i <= 36; i++) {
 
-      if (i % 2 == 0) {
+      if (i % 2 != 0) {
         fill(232, 10, 50);
       } else {
         fill(10, 10, 10);
@@ -152,6 +159,16 @@ class roulette {
     for (int i = 0; i<Chips.length; i++) {
       Chips[i].display();
     }
+
+
+    fill(255);
+    triangle(width/2 - 10, 10, width/2 + 10, 10, width/2, 40);
+
+    textSize(50);
+    for (int i = 0; i < tutorial_chips.length; i++) {
+      tutorial_chips[i].display();
+      text(" = " + 25*(i+1), 200, height/4 - 50 + 100*i);
+    }
   }
 
   void draw_text(float lastAngle, int number) {
@@ -162,6 +179,8 @@ class roulette {
     textAlign(CENTER, BOTTOM);
 
 
+    textFont(font4);
+    textSize(30);
     text(number, 0, -260);
     popMatrix();
   }

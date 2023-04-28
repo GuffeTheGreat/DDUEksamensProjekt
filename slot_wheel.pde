@@ -121,15 +121,15 @@ class Symbol{
   
   void display(){
       
-          if (location.y > 775){
-            symbol_idx = int(random(0,8));
+          if (location.y > 775){;
+            symbol_idx = round(random(0,7));
             location.y = spawn_y_pos;
           }
     if (location.y < 0 || location.y > 500){
       return;
     }
     
-    PImage new_img = symbol_images.get(0,(symbol_images.height/8) * symbol_idx,symbol_images.width,symbol_images.height/8);
+    PImage new_img = symbol_images.get(0,round(symbol_images.height/8 * symbol_idx),symbol_images.width,symbol_images.height/8);
       image(new_img,location.x,location.y + offset_y);
 
       }
