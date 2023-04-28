@@ -1,6 +1,7 @@
-import processing.sound.*; 
+import processing.sound.*; //<>// //<>// //<>//
+import de.bezier.data.sql.*;
 
-int page = 2;
+int page = 1;
 
 // Sounds
 SoundFile win_sound;
@@ -9,6 +10,8 @@ SoundFile slot_machine_wheelstop;
 SoundFile spin_sound;
 
 SoundFile CardFlip;
+
+MySQL db;
 
 int credits = 20000;
 float displaycredits = credits;
@@ -32,8 +35,18 @@ int treecounter = 47;
 int load = 1;
 int tredjedel = width/3;
 String name = "Green Jackpot Casino";
+String DB_URL = "hc.hyperservers.dk:3306";
+String user = "u1_UuV4WCkMbn";
+String pass = "O8N=7PpTCi1KaE0Z+k@mgVea"; // shhhh
+String high_navn;
+int highscore;
+int b = 1;
 boolean changed;
 int charity = 0;
+String pname;
+boolean search;
+boolean nameExists;
+String searchTerm;
 
 PImage Tree[] = new PImage[treecounter+1];
 
@@ -51,6 +64,9 @@ roulette Game4;
 
 
 void setup() {
+
+  searchTerm = "";
+  pname= "Gæst";
 
   // Fullscreen
   fullScreen();
@@ -92,6 +108,20 @@ void setup() {
   Game2 = new Game("Monkey Mayhem", 2);
   Game3 = new HighOrLow("Forest Flip", 3);
   Game4 = new roulette("Tree-Top Roulette", 4);
+
+  db = new MySQL( this, DB_URL, "s1_DDUFilip", user, pass );
+  if ( !db.connect() )
+  {
+    println("Guh!");
+  } else
+  {
+    db.query("SELECT user, highscore FROM personer ORDER BY highscore DESC LIMIT 0,1;");
+    while (db.next())
+    {
+      high_navn = db.getString("user");
+      highscore = db.getInt("highscore");
+    }
+  }
 }
 
 void draw() {
@@ -172,24 +202,22 @@ void draw() {
     break;
   case 2:
     if (changed == true) {
-      SpilNu.draw();
-      Konto.draw();
-      Leaderboard.draw();
       image(Tree[12], 0, 0, width, height);
       image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
       fill(0);
       textFont(font1);
-      textSize(129);
-      text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
-      fill(255);
       textSize(128);
+      textAlign(CENTER, CENTER);
+      text(charity, width/2+1, (height/7+(2*(height/5)))/2-height/8+106);
+      fill(255);
       text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+105);
-      changed = false;
       SpilNu.draw();
       Konto.draw();
       Leaderboard.draw();
+      changed = false;
     }
+
     break;
   case 3:
     if (changed == true) {
@@ -202,14 +230,16 @@ void draw() {
       Game3.BigButton(4*width/30+2*width/5, height/3+40);
       Game4.BigButton(5*width/30+3*width/5, height/3+40);
 
-      textFont(font3);
-      fill(223, 180, 83);
       textAlign(CENTER);
+      textFont(font3);
+      fill(0);
+      textSize(height/3-20);
+      text("SPIL", width/2+1, height/2-height/4+1);
+      fill(223, 180, 83);
       textSize(height/3-20);
       text("SPIL", width/2, height/2-height/4);
 
       textFont(font1);
-
       fill(0);
       textSize(height/12);
       text("Klassikerne", width/4+1, height/3+1);
@@ -233,6 +263,46 @@ void draw() {
       Tilbage.draw();
       fill(0, 0, 0, 200);
       rect(width/4, height/8, 2*width/4, 6*height/8);
+      pushMatrix();
+      textAlign(CENTER);
+      textFont(font1);
+      textSize(80); //title
+      fill(0);
+      text("Top Donationer", width/2+1, height/4+1);
+      fill(255);
+      text("Top Donationer", width/2, height/4);
+      textSize(35);
+      fill(0);
+      //text("Tryk på taster for at søge: "+searchTerm, width/2, 180);
+      textFont(font4);
+      textSize(25);
+      fill(255);
+      //if ( searchTerm.equals(""))
+      //{
+      db.query("SELECT user, highscore FROM personer ORDER BY highscore DESC LIMIT 0,15;");
+      //} else
+      //{
+      //db.query("SELECT user, highscore FROM personer where UPPER(user) like UPPER('%"+searchTerm+"%') ORDER BY highscore DESC LIMIT 0,5;");
+      //}
+
+      int iy = height/3;
+      while (db.next()) {
+        text("Nummer " +b+": " + "Navn: " + db.getString("user")+" \t, Donation: " + db.getInt("highscore"), width/2, iy-10);
+        iy+=40;
+        b++;
+      }
+      if (!(pname.equals("Gæst")) && nameExists)
+      {
+        db.query("SELECT highscore FROM personer where UPPER(user) = UPPER('"+pname+"');");
+        while (db.next())
+        {
+          fill(50, 130, 50);
+          text("Din highscore: " + db.getInt("highscore"), width/2, iy+30);
+          fill(0);
+        }
+      }
+
+      popMatrix();
       changed = false;
     }
     break;
@@ -241,6 +311,44 @@ void draw() {
       image(Tree[12], 0, 0, width, height);
       Tilbage.draw();
       changed = false;
+      pushMatrix();
+      textAlign(CENTER);
+      textSize(60); //title
+      fill(150, 20, 20);
+      text("Dit Navn:" + pname, width/2, 140);
+      textSize(30);
+      text("Tryk enter når du har skrevet det", width/2, 180);
+      textSize(25);
+      fill(0);
+      /*Knap tmp = knapper.get(0);
+      tmp.hover();
+
+      if (tmptext.length() > 12)
+      {
+        tmp.display(50-(tmptext.length()-12)*2);
+      } else
+      {
+        tmp.display();
+      }
+
+      tmp.txt = tmptext;
+      if (tmptext.equals(""))
+      {
+        textAlign(CENTER);
+        text("Skriv navn", width/2, height/2+125);
+      }
+      db.query("select exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'));");
+      while (db.next())
+      {
+        if (db.getInt("exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'))") == 1)
+        {
+          textSize(20);
+          textAlign(CENTER);
+          text("Navn eksisterer i database. Eksisterende highscore vil blive opdateret.", width/2, 210);
+        }
+      }*/
+      textAlign(LEFT);
+      popMatrix();
     }
     break;
   case 6:
@@ -259,7 +367,6 @@ void draw() {
     Tilbage.draw();
     break;
   case 9:
-
     background(0, 120, 72);
     Game4.display();
     Tilbage.draw();
