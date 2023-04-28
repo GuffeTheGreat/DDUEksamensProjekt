@@ -71,6 +71,7 @@ class HighOrLow {
 
     CardFlip.play();
     credits -= bet_amount;
+    charity += bet_amount;
     credit_notification(-bet_amount);
     displaycredits = credits;
 

@@ -32,7 +32,7 @@ class Game {
   int bet_amount = 0;
 
 
-  PImage payout_chart = loadImage("payout_chart_1.png");
+  PImage payout_chart = loadImage("payout_chart_2.png");
   float chart_y_position = height;
   boolean chart_showing = false;
 
@@ -49,7 +49,7 @@ class Game {
     this.name = name;
     this.id = id;
     SpinButton = new Button("Spin", width/2 - 90, height - 150, 180, 130, 0, 0, 0, 400, 255);
-    PayoutTableButton = new Button("Payout Table thing", width/2 - 90, height - 220, 180, 50, 0, 0, 0, 400, 255);
+    PayoutTableButton = new Button("Payout Table", width/2 - 90, height - 220, 180, 50, 0, 0, 0, 400, 255);
 
     for (int a = 0; a < 4; a++) {
       line_buttons.add(new Button((1 + 2*(3-a)) +"\nLines", width/2 - 250 - (a * 150), height - 150, 130, 130, 0, 0, 0, 400, 255));
@@ -212,7 +212,7 @@ class Game {
     } else {
       chart_y_position = lerp(chart_y_position, height, 0.2);
     }
-    if (chart_y_position > height) {
+    if (true) {
       image(payout_chart, width/15, (chart_y_position), width - (width/15)*2, height - (height/15)*2);
     }
   }
@@ -223,6 +223,7 @@ class Game {
       slot_machine_start.play();
       canSpin = false;
       credits -= bet_amount * 15;
+      charity += bet_amount * 15;
       credit_notification(-(bet_amount * 15));
       displaycredits = credits;
       show_result = false;

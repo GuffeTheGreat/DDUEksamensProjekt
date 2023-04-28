@@ -1,4 +1,4 @@
-import processing.sound.*; //<>// //<>// //<>//
+import processing.sound.*; 
 import de.bezier.data.sql.*;
 
 int page = 1;

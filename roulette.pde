@@ -53,7 +53,7 @@ class roulette {
   void start_spinning() {
     spinning = true;
     rotation = random(90, 200);
-    spin_sound.play();
+    //spin_sound.play();
     int take_amount = 0;
     for (int i = 0; i<Chips.length; i++) {
       take_amount -= Chips[i].chip_lvl * 25;
