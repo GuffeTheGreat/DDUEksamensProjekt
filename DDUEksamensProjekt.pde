@@ -1,4 +1,4 @@
-import processing.sound.*; 
+import processing.sound.*; //<>// //<>// //<>//
 import de.bezier.data.sql.*;
 
 int page = 1;
@@ -40,7 +40,7 @@ String user = "u1_UuV4WCkMbn";
 String pass = "O8N=7PpTCi1KaE0Z+k@mgVea"; // shhhh
 String high_navn;
 int highscore;
-int b = 1;
+int b;
 boolean changed;
 int charity = 0;
 String pname;
@@ -286,6 +286,7 @@ void draw() {
       //}
 
       int iy = height/3;
+      b = 1;
       while (db.next()) {
         text("Nummer " +b+": " + "Navn: " + db.getString("user")+" \t, Donation: " + db.getInt("highscore"), width/2, iy-10);
         iy+=40;
@@ -321,32 +322,32 @@ void draw() {
       textSize(25);
       fill(0);
       /*Knap tmp = knapper.get(0);
-      tmp.hover();
-
-      if (tmptext.length() > 12)
-      {
-        tmp.display(50-(tmptext.length()-12)*2);
-      } else
-      {
-        tmp.display();
-      }
-
-      tmp.txt = tmptext;
-      if (tmptext.equals(""))
-      {
-        textAlign(CENTER);
-        text("Skriv navn", width/2, height/2+125);
-      }
-      db.query("select exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'));");
-      while (db.next())
-      {
-        if (db.getInt("exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'))") == 1)
-        {
-          textSize(20);
-          textAlign(CENTER);
-          text("Navn eksisterer i database. Eksisterende highscore vil blive opdateret.", width/2, 210);
-        }
-      }*/
+       tmp.hover();
+       
+       if (tmptext.length() > 12)
+       {
+       tmp.display(50-(tmptext.length()-12)*2);
+       } else
+       {
+       tmp.display();
+       }
+       
+       tmp.txt = tmptext;
+       if (tmptext.equals(""))
+       {
+       textAlign(CENTER);
+       text("Skriv navn", width/2, height/2+125);
+       }
+       db.query("select exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'));");
+       while (db.next())
+       {
+       if (db.getInt("exists(select 1 from personer where UPPER(user) = UPPER('"+tmptext+"'))") == 1)
+       {
+       textSize(20);
+       textAlign(CENTER);
+       text("Navn eksisterer i database. Eksisterende highscore vil blive opdateret.", width/2, 210);
+       }
+       }*/
       textAlign(LEFT);
       popMatrix();
     }
