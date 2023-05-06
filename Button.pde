@@ -48,8 +48,8 @@ class Button {
     }
     return clicked;
   }
-  
-  
+
+
   boolean isRightClicked() {
     if (!disabled && mousePressed && mouseButton == (RIGHT) && mouseX >= x && mouseX <= x+ w && mouseY >= y && mouseY <= y + h) {
       clicked = true;

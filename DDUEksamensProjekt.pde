@@ -1,3 +1,4 @@
+
 import processing.sound.*;
 import de.bezier.data.sql.*;
 
@@ -40,7 +41,7 @@ String user = "u1_UuV4WCkMbn";
 String pass = "O8N=7PpTCi1KaE0Z+k@mgVea"; // shhhh
 String high_navn;
 int highscore;
-int b = 1;
+int b;
 boolean changed;
 int charity = 0;
 String pname;
@@ -357,6 +358,7 @@ void draw() {
       db.query("SELECT USER_NAME, USER_DONATIONS FROM users ORDER BY USER_DONATIONS DESC LIMIT 0,15;");
 
       int iy = height/3;
+      b = 1;
       while (db.next()) {
         text("Nummer " +b+": " + "Navn: " + db.getString("USER_NAME")+" \t, Donation: " + db.getInt("USER_DONATIONS"), width/2, iy-10);
         iy+=40;
