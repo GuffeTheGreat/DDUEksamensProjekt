@@ -16,7 +16,7 @@ class roulette {
   ArrayList<Button> Bet_Buttons = new ArrayList<Button>();
   Button Spin_Button;
 
-  bet_chip[] Chips = new bet_chip[36];
+  bet_chip[] Chips = new bet_chip[39];
   bet_chip[] tutorial_chips = new bet_chip[4];
 
 
@@ -26,6 +26,7 @@ class roulette {
     preview = loadImage(id+".png");
     Spin_Button = new Button("Spin", width/2-50, int(height*0.665), 100, 50, 255, 255, 255, 255, 0);
     Spin_Button.disabled = true;
+    Bet_Buttons.add(new Button(str(0), width/2 - 700 + 100*(0), height-310 + 100* ceil((12)/12), 100, 100, 0, 120, 72, 255, 255));
     for (int i = 0; i<36; i++) {
 
 
@@ -37,30 +38,43 @@ class roulette {
         Bet_Buttons.add(new Button(str(i+1), width/2 - 600 + 100*(i%12), height-310 + 100* ceil((i)/12), 100, 100, 10, 10, 10, 255, 255));
       }
     }
+    Bet_Buttons.add(new Button("Rød", width/2 - 700 + 100*(0), height-310 + 100* ceil((1)/12), 100, 100, 232, 10, 50, 255, 255));
+    Bet_Buttons.add(new Button("Sort", width/2 - 700 + 100*(0), height-310 + 100* ceil((24)/12), 100, 100, 10, 10, 10, 255, 255));
 
     for (int i = 0; i < tutorial_chips.length; i++) {
       tutorial_chips[i] = new bet_chip(new PVector(20, height/6+ 100*i));
-      tutorial_chips[i].chip_lvl = i;
+      tutorial_chips[i].chip_lvl = i-1;
       tutorial_chips[i].change_bet(true);
+      tutorial_chips[i].tutorial = true;
     }
 
-    for (int n = 0; n<36; n++) {
+    Chips[0] = new bet_chip( new PVector(width/2 - 700, height-310 + 100 * 1));
+    for (int n = 1; n<37; n++) {
 
-      Chips[n] = new bet_chip( new PVector(width/2 - 600 + 100*(n%12), height-310 + 100* ceil((n)/12)));
+      Chips[n] = new bet_chip( new PVector(width/2 - 600 + 100*(n-1%12), height-310 + 100* ceil((n-1)/12)));
     }
+
+    Chips[37] = new bet_chip( new PVector(width/2 - 700, height-310 + 100 * 0));
+    Chips[38] = new bet_chip( new PVector(width/2 - 700, height-310 + 100 * 2));
   }
 
   void start_spinning() {
-    spinning = true;
-    rotation = random(90, 200);
-    //spin_sound.play();
+
     int take_amount = 0;
     for (int i = 0; i<Chips.length; i++) {
-      take_amount -= Chips[i].chip_lvl * 25;
+      take_amount -= max(Chips[i].chip_lvl+1, 0) * 25;
     }
-    credits += take_amount;
-    charity += abs(take_amount);
-    credit_notification(take_amount);
+
+    if (credits + take_amount >= 0) {
+
+      spinning = true;
+      //rotation = 10;
+      rotation = random(30, 300);
+      credits += take_amount;
+      charity += abs(take_amount);
+      credit_notification(take_amount);
+      update_credit_database();
+    }
   }
 
   void display() {
@@ -131,25 +145,35 @@ class roulette {
 
     popMatrix();
 
-    for (int i = 0; i < 36; i++) {
+    for (int i = 0; i < Bet_Buttons.size(); i++) {
       Bet_Buttons.get(i).draw();
     }
-    text(rotation, 80, 80);
+    //text(rotation, 80, 120);
+    //text(angle, 80, 160);
 
 
     if (spinning && rotation < 0.1) {
-      println((int((angle+360 - 90)%360/9.7298)));
-      println(Chips[(int((angle+360 - 90)%360/9.7298)) - 1].chip_lvl);
 
-      int payout = (Chips[(int((angle+360 - 90)%360/9.7298)) - 1].chip_lvl * 25) * 10;
+      int payout_index = (floor((angle+360 - 90)%360/9.7298));
 
+
+      int payout = (max(Chips[payout_index].chip_lvl+1, 0) * 25) * 10;
+      println((floor((angle+360 - 90)%360/9.7298)));
+
+      if (payout_index % 2 != 0 && payout_index != 0) {
+        payout += max(Chips[37].chip_lvl+1, 0) * 25 * 2;
+      } else if (payout_index % 2 == 0 && payout_index != 0) {
+
+        payout += max(Chips[38].chip_lvl+1, 0) * 25 * 2;
+      }
       credits += payout;
+      update_credit_database();
 
       if (payout != 0) {
         credit_notification(payout);
       }
       for (int i = 0; i<Chips.length; i++) {
-        Chips[i].chip_lvl = 0;
+        Chips[i].chip_lvl = -1;
       }
       spinning = false;
     }
@@ -164,9 +188,11 @@ class roulette {
     fill(255);
     triangle(width/2 - 10, 10, width/2 + 10, 10, width/2, 40);
 
-    textSize(50);
     for (int i = 0; i < tutorial_chips.length; i++) {
       tutorial_chips[i].display();
+      fill(255);
+      textSize(50);
+      textAlign(CENTER, CENTER);
       text(" = " + 25*(i+1), 200, height/4 - 50 + 100*i);
     }
   }
@@ -217,10 +243,12 @@ class roulette {
 
 class bet_chip {
   PVector location;
-  int chip_lvl = 0;
+  int chip_lvl = -1;
 
   color col1 = color(0);
   color col2 = color(0);
+
+  boolean tutorial = false;
 
   bet_chip(PVector loc) {
     location = loc;
@@ -229,25 +257,25 @@ class bet_chip {
   void change_bet(boolean increase) {
 
     if (increase) {
-      chip_lvl = min(4, chip_lvl + 1);
+      chip_lvl = chip_lvl + 1;
     } else {
-      chip_lvl = max(0, chip_lvl - 1);
+      chip_lvl = max(-1, chip_lvl - 1);
     }
 
-    switch (chip_lvl) {
-    case 1:
+    switch (chip_lvl%4) {
+    case 0:
       col1 = color(255);
       col2 = color (0);
       break;
-    case 2:
+    case 1:
       col1 = color(255, 0, 0);
       col2 = color(255);
       break;
-    case 3:
+    case 2:
       col1 = color(0, 0, 255);
       col2 = color(255);
       break;
-    case 4:
+    case 3:
       col1 = color(10);
       col2 = color(255);
       break;
@@ -255,7 +283,7 @@ class bet_chip {
   }
 
   void display() {
-    if (chip_lvl == 0) {
+    if (chip_lvl == -1) {
       return;
     }
 
@@ -278,6 +306,14 @@ class bet_chip {
 
     stroke(0);
     circle(location.x + 50, location.y+50, 60);
+
+    if (tutorial == false) {
+      fill(col2);
+      textFont(font4);
+      textSize(25);
+      textAlign(CENTER);
+      text("x" + (floor(chip_lvl/4)+ 1), location.x + 50, location.y + 55);
+    }
     popMatrix();
   }
 }

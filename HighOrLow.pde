@@ -68,13 +68,16 @@ class HighOrLow {
   }
 
   void guess(int guessMode) {
+    if (credits - bet_amount < 0) {
+      return;
+    }
 
     CardFlip.play();
     credits -= bet_amount;
     charity += bet_amount;
     credit_notification(-bet_amount);
     displaycredits = credits;
-
+    update_credit_database();
     switch (guessMode) {
     case 0:
       if (card_next_number < card_number) {
@@ -121,6 +124,7 @@ class HighOrLow {
 
   void generate_next() {
     card2 = card1.dupe();
+    card2.location.y = 10;
     card1.location.y = -500;
     card_number = card_next_number;
     card1.idx = card_number;
@@ -151,6 +155,7 @@ class HighOrLow {
     credit_notification(payout);
     credits += payout;
     payout = 0;
+    update_credit_database();
 
     for (int i = 0; i < bet_buttons.size(); i++) {
       bet_buttons.get(i).disabled = payout != 0;

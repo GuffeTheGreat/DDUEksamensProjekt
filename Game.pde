@@ -32,6 +32,7 @@ class Game {
   int bet_amount = 0;
 
 
+
   PImage payout_chart = loadImage("payout_chart_2.png");
   float chart_y_position = height;
   boolean chart_showing = false;
@@ -72,16 +73,18 @@ class Game {
       slot.display();
 
 
-      if (slot.stopped == false && slot.start_time + slot.delay_time < millis() && slot.symbols.get(0).location.y % 250 == 0) {
+      if (id == 1) {
+        if (slot.stopped == false && slot.start_time + slot.delay_time < millis() && slot.symbols.get(0).location.y % 250 == 0) {
 
-        slot.stopped = true;
-        for (int n = 0; n < slot.symbols.size(); n++) {
-          float y_pos = (slot.symbols.get(n).location.y)/250;
-          int new_y_pos = round(y_pos);
-          slot.symbols.get(n).location.y = 250.0 * new_y_pos;
+          slot.stopped = true;
+          for (int n = 0; n < slot.symbols.size(); n++) {
+            float y_pos = (slot.symbols.get(n).location.y)/250;
+            int new_y_pos = round(y_pos);
+            slot.symbols.get(n).location.y = 250.0 * new_y_pos;
+          }
+          slot_machine_wheelstop.play();
+          slot.stop();
         }
-        slot_machine_wheelstop.play();
-        slot.stop();
       }
 
       if (slot.stopped == false) {
@@ -232,6 +235,7 @@ class Game {
       isVshape = false;
       isAshape = false;
       vertical_lines = new boolean[5];
+      update_credit_database();
 
       for (int i = 0; i < Slots.size(); i++) {
         Slots.get(i).stopped = false;
@@ -395,7 +399,6 @@ class Game {
         isAshape = true;
         is_there_win = true;
         win_ += 125 * symbol2look4;
-
       }
 
 
@@ -428,6 +431,7 @@ class Game {
       credits += win_;
       credit_notification(win_);
       win_sound.loop();
+      update_credit_database();
     }
     win_amount = win_;
   }

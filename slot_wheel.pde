@@ -23,7 +23,7 @@ class slot_wheel {
     for (int i = 0; i < 8; i++){
     
       int rng = int(random(0,random_numbers.length));
-      symbols.add(new Symbol(random_numbers[rng], new PVector(location.x,location.y - (250 * i) + 500),250 - (250 * 6),location.y));
+      symbols.add(new Symbol(random_numbers[rng], new PVector(location.x,location.y - (250 * i) + 500-125),250 - (250 * 6),location.y));
       
       
       int sub1 = random_numbers[random_numbers.length-1];
