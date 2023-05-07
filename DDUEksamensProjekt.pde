@@ -694,9 +694,11 @@ void mousePressed() {
 
     if (Donate_Confirm.isClicked()) {
       if (credits-int(Donate.text) >= 0) {
+
         credits -= int(Donate.text);
+        charity += int(Donate.text);
         Donate.text = "";
-        db.query("UPDATE `s1_DDUFilip`.`users` SET `USER_CASH` = '"+credits+"' WHERE (`USER_NAME` = '" + pname + "');");
+        update_credit_database();
       }
     }
 
@@ -791,7 +793,7 @@ void mousePressed() {
           Game4.Chips[i].change_bet(false);
         }
 
-        if (Game4.Chips[i].chip_lvl > 0) {
+        if (Game4.Chips[i].chip_lvl > -1) {
           isEmpty = false;
         }
       }
