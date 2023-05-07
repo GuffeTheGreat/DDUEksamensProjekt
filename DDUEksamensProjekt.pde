@@ -1,8 +1,8 @@
- //<>//
+ //<>// //<>//
 import processing.sound.*;
 import de.bezier.data.sql.*;
 
-int page = 2;
+int page = 1;
 
 // Sounds
 SoundFile win_sound;
