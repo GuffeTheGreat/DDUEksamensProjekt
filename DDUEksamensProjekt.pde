@@ -52,6 +52,7 @@ String searchTerm;
 
 PImage Tree[] = new PImage[treecounter+1];
 PImage foreground1;
+PImage foreground2;
 
 Button Leaderboard;
 Button SpilNu;
@@ -127,6 +128,7 @@ void setup() {
   }
 
   foreground1 = loadImage("data/foreground_1.png");
+  foreground2 = loadImage("data/foreground_2.png");
 
   // Create Buttons
   Leaderboard = new Button("Rangliste", width/24, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24), 10, 10, 10, 200, 255);
@@ -448,7 +450,7 @@ void draw() {
     Tilbage.draw();
     break;
   case 7:
-    background(100);
+    background(foreground2);
     Game2.display();
     Tilbage.draw();
     break;
