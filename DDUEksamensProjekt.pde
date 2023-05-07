@@ -44,12 +44,14 @@ int highscore;
 int b;
 boolean changed;
 int charity = 0;
+int global_charity = 0;
 String pname;
 boolean search;
 boolean nameExists;
 String searchTerm;
 
 PImage Tree[] = new PImage[treecounter+1];
+PImage foreground1;
 
 Button Leaderboard;
 Button SpilNu;
@@ -124,6 +126,8 @@ void setup() {
     Tree[i] = loadImage("data/"+i+"tree.png");
   }
 
+  foreground1 = loadImage("data/foreground_1.png");
+
   // Create Buttons
   Leaderboard = new Button("Rangliste", width/24, 2*height/3, (width/3)-(width/24)-(width/48), height-(2*height/3)-(width/24), 10, 10, 10, 200, 255);
   SpilNu = new Button("Spil Nu", width/3, height/7+(2*(height/5)), width/3, 2*(height/5), 10, 10, 10, 200, 255);
@@ -142,7 +146,7 @@ void setup() {
   OpretbrugerNavn = new TypeField(new PVector(width/2 - 250, height/2 + 0), 500, 60, "Ny Brugernavn", false);
   OpretbrugerKode = new TypeField(new PVector(width/2 - 250, height/2 + 100), 500, 60, "Ny Adgangskode", false);
   lavNyBruger = new Button("Opret Ny Bruger", width/2 - 100, height/2 + 200, 200, 60, 255, 255, 255, 255, 0);
-  harAlleredeBruger = new Button("Har allerede en bruger?", width/2 - 100, height/2 + 270, 200, 60, 255, 255, 255, 255, 0);
+  harAlleredeBruger = new Button("Har allerede en bruger?", width/2 - 110, height/2 + 270, 220, 60, 255, 255, 255, 255, 0);
 
   //Konto
 
@@ -263,6 +267,7 @@ void draw() {
     break;
   case 2:
     if (changed == true) {
+      calculate_global_charity();
       image(Tree[12], 0, 0, width, height);
       image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8+150, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
@@ -270,16 +275,16 @@ void draw() {
       textFont(font1);
       textSize(128);
       textAlign(CENTER, CENTER);
-      text(charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+253);
+      text(global_charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+253);
       fill(255);
-      text(charity, width/2, (height/7+(2*(height/5)))/2-height/8+250);
+      text(global_charity, width/2, (height/7+(2*(height/5)))/2-height/8+250);
 
       textFont(font4);
       textSize(64);
       fill(0);
-      text("Du har doneret så mange træer:", width/2+3, (height/7+(2*(height/5)))/2-height/8+5 + 103);
+      text("Vi har doneret så mange træer:", width/2+3, (height/7+(2*(height/5)))/2-height/8+5 + 103);
       fill(255);
-      text("Du har doneret så mange træer:", width/2, (height/7+(2*(height/5)))/2-height/8+5 + 100);
+      text("Vi har doneret så mange træer:", width/2, (height/7+(2*(height/5)))/2-height/8+5 + 100);
       SpilNu.draw();
       Konto.draw();
       Leaderboard.draw();
@@ -438,7 +443,7 @@ void draw() {
     Donate_Confirm.draw();
     break;
   case 6:
-    background(100);
+    background(foreground1);
     Game1.display();
     Tilbage.draw();
     break;
@@ -508,15 +513,15 @@ void draw() {
           break;
         case 1:
           img = Game2.preview;
-          name = Game1.name;
+          name = Game2.name;
           break;
         case 2:
           img = Game3.preview;
-          name = Game1.name;
+          name = Game3.name;
           break;
         case 3:
           img = Game4.preview;
-          name = Game1.name;
+          name = Game4.name;
           break;
         }
         popular_game_buttons.get(i).draw();
@@ -886,7 +891,14 @@ void mousePressed() {
 
       //page = 2;
     }
+    if (harAlleredeBruger.isClicked()) {
 
+      OpretbrugerNavn.text = "";
+      OpretbrugerKode.text = "";
+      page = 10;
+      brugerNavn.text = "";
+      brugerKode.text = "";
+    }
     break;
 
   case 12:
@@ -912,6 +924,10 @@ void mousePressed() {
           break;
         }
       }
+    }
+
+    if (Tilbage.isClicked()) {
+      page = 3;
     }
     break;
 
@@ -939,6 +955,9 @@ void mousePressed() {
           break;
         }
       }
+    }
+    if (Tilbage.isClicked()) {
+      page = 3;
     }
     break;
   }
@@ -972,6 +991,14 @@ void keyPressed() {
 void update_credit_database() {
   db.query("UPDATE `s1_DDUFilip`.`users` SET `USER_CASH` = '"+credits+"' WHERE (`USER_NAME` = '" + pname + "');");
   db.query("UPDATE `s1_DDUFilip`.`users` SET `USER_DONATIONS` = '"+charity+"' WHERE (`USER_NAME` = '" + pname + "');");
+}
+
+void calculate_global_charity() {
+  global_charity = 0;
+  db.query("SELECT USER_DONATIONS FROM `s1_DDUFilip`.`users`;");
+  while (db.next()) {
+    global_charity += db.getInt("USER_DONATIONS");
+  }
 }
 
 void credit_notification(int amount) {

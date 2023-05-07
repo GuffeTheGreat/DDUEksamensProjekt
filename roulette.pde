@@ -51,7 +51,7 @@ class roulette {
     Chips[0] = new bet_chip( new PVector(width/2 - 700, height-310 + 100 * 1));
     for (int n = 1; n<37; n++) {
 
-      Chips[n] = new bet_chip( new PVector(width/2 - 600 + 100*(n-1%12), height-310 + 100* ceil((n-1)/12)));
+      Chips[n] = new bet_chip( new PVector(width/2 - 600 + 100*((n-1)%12), height-310 + 100* ceil((n-1)/12)));
     }
 
     Chips[37] = new bet_chip( new PVector(width/2 - 700, height-310 + 100 * 0));

@@ -31,6 +31,8 @@ class Game {
 
   int bet_amount = 0;
 
+  int wheel_to_stop = 0;
+
 
 
   PImage payout_chart = loadImage("payout_chart_2.png");
@@ -75,6 +77,20 @@ class Game {
 
       if (id == 1) {
         if (slot.stopped == false && slot.start_time + slot.delay_time < millis() && slot.symbols.get(0).location.y % 250 == 0) {
+
+          slot.stopped = true;
+          for (int n = 0; n < slot.symbols.size(); n++) {
+            float y_pos = (slot.symbols.get(n).location.y)/250;
+            int new_y_pos = round(y_pos);
+            slot.symbols.get(n).location.y = 250.0 * new_y_pos;
+          }
+          slot_machine_wheelstop.play();
+          slot.stop();
+        }
+      } else {
+
+
+        if (slot.stopped == false && wheel_to_stop == i+1 && slot.symbols.get(0).location.y % 250 == 0) {
 
           slot.stopped = true;
           for (int n = 0; n < slot.symbols.size(); n++) {
@@ -221,7 +237,7 @@ class Game {
   }
 
   void spin() {
-    if (canSpin && credits >= bet_amount * 15 && !chart_showing && bet_amount > 0) {
+    if (id == 1 && canSpin && !flashing && credits >= bet_amount * 15 && !chart_showing && bet_amount > 0) {
       win_amount = 0;
       slot_machine_start.play();
       canSpin = false;
@@ -240,6 +256,36 @@ class Game {
       for (int i = 0; i < Slots.size(); i++) {
         Slots.get(i).stopped = false;
         Slots.get(i).start_time = millis();
+      }
+    }
+
+
+
+    if (id == 2 && credits >= bet_amount * 15 && !chart_showing && !flashing  && bet_amount > 0) { //<>//
+
+      if (canSpin) {
+        wheel_to_stop = 0;
+        win_amount = 0;
+        slot_machine_start.play();
+        canSpin = false;
+        credits -= bet_amount * 15;
+        charity += bet_amount * 15;
+        credit_notification(-(bet_amount * 15));
+        displaycredits = credits;
+        show_result = false;
+        game_result = new int[3][5];
+        actual_result = new int[3][5];
+        isVshape = false;
+        isAshape = false;
+        vertical_lines = new boolean[5];
+        update_credit_database();
+
+        for (int i = 0; i < Slots.size(); i++) {
+          Slots.get(i).stopped = false;
+          Slots.get(i).start_time = millis();
+        }
+      } else {
+        wheel_to_stop++;
       }
     }
   }
