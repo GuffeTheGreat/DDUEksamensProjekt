@@ -1,8 +1,8 @@
-
+ //<>//
 import processing.sound.*;
 import de.bezier.data.sql.*;
 
-int page = 1;
+int page = 2;
 
 // Sounds
 SoundFile win_sound;
@@ -271,22 +271,29 @@ void draw() {
     if (changed == true) {
       calculate_global_charity();
       image(Tree[12], 0, 0, width, height);
-      image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8+150, width/2, height/4);
+      image(Tree[13], width/4, (height/7+(2*(height/5)))/2-height/8, width/2, height/4);
       image(Tree[11], width/6, height/4-height/5-50, 4*width/6, height/5);
       fill(0);
       textFont(font1);
       textSize(128);
       textAlign(CENTER, CENTER);
-      text(global_charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+253);
+      text(global_charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+103);
       fill(255);
-      text(global_charity, width/2, (height/7+(2*(height/5)))/2-height/8+250);
-
+      text(global_charity, width/2, (height/7+(2*(height/5)))/2-height/8+100);
       textFont(font4);
-      textSize(64);
+      textSize(36);
       fill(0);
-      text("Vi har doneret så mange træer:", width/2+3, (height/7+(2*(height/5)))/2-height/8+5 + 103);
+      text("Træer", width/4+width/2-140, (height/7+(2*(height/5)))/2-height/8+5 +182);
+      text("Har", width/4+112, (height/7+(2*(height/5)))/2-height/8+52);
+      textSize(36);
+      text("Plantet", width/4+144-5, (height/7+(2*(height/5)))/2-height/8+102);
+      textSize(36);
       fill(255);
-      text("Vi har doneret så mange træer:", width/2, (height/7+(2*(height/5)))/2-height/8+5 + 100);
+      text("Træer", width/4+width/2-142, (height/7+(2*(height/5)))/2-height/8+5 +180);
+      text("Har", width/4+110, (height/7+(2*(height/5)))/2-height/8+50);
+      textSize(36);
+      text("Plantet", width/4+142-5, (height/7+(2*(height/5)))/2-height/8+100);
+
       SpilNu.draw();
       Konto.draw();
       Leaderboard.draw();
