@@ -2,7 +2,7 @@
 import processing.sound.*;
 import de.bezier.data.sql.*;
 
-int page = 1;
+int page = 2;
 
 // Sounds
 SoundFile win_sound;
@@ -277,22 +277,17 @@ void draw() {
       textFont(font1);
       textSize(128);
       textAlign(CENTER, CENTER);
-      text(global_charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+103);
+      text(global_charity, width/2+3, (height/7+(2*(height/5)))/2-height/8+118);
       fill(255);
-      text(global_charity, width/2, (height/7+(2*(height/5)))/2-height/8+100);
+      text(global_charity, width/2, (height/7+(2*(height/5)))/2-height/8+115);
       textFont(font4);
       textSize(36);
       fill(0);
-      text("Træer", width/4+width/2-140, (height/7+(2*(height/5)))/2-height/8+5 +182);
-      text("Har", width/4+112, (height/7+(2*(height/5)))/2-height/8+52);
-      textSize(36);
-      text("Plantet", width/4+144-5, (height/7+(2*(height/5)))/2-height/8+102);
-      textSize(36);
+      text("Træer", width/4+width/2-142+2, (height/7+(2*(height/5)))/2-height/8+5 +200+2);
+      text("Har Plantet", width/4+160+2, (height/7+(2*(height/5)))/2-height/8+38+2);
       fill(255);
-      text("Træer", width/4+width/2-142, (height/7+(2*(height/5)))/2-height/8+5 +180);
-      text("Har", width/4+110, (height/7+(2*(height/5)))/2-height/8+50);
-      textSize(36);
-      text("Plantet", width/4+142-5, (height/7+(2*(height/5)))/2-height/8+100);
+      text("Træer", width/4+width/2-142, (height/7+(2*(height/5)))/2-height/8+5 +200);
+      text("Har Plantet", width/4+160, (height/7+(2*(height/5)))/2-height/8+38);
 
       SpilNu.draw();
       Konto.draw();
